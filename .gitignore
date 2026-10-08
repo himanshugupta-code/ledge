@@ -4,3 +4,14 @@ out/
 *.log
 .DS_Store
 release/
+
+# Signing / App Store (sensitive)
+build/*.provisionprofile
+build/entitlements*.plist
+*.p12
+*.cer
+*.mobileprovision
+
+# Local tooling
+.claude/
+skills-lock.json
