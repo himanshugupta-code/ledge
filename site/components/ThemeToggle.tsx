@@ -25,7 +25,6 @@ const icons: Record<Mode, React.ReactNode> = {
   ),
 };
 
-const labels: Record<Mode, string> = { light: "Light theme", system: "System theme", dark: "Dark theme" };
 
 function apply(mode: Mode) {
   const root = document.documentElement;
@@ -33,7 +32,9 @@ function apply(mode: Mode) {
   else root.setAttribute("data-theme", mode);
 }
 
-export function ThemeToggle() {
+type Labels = { group: string; light: string; system: string; dark: string };
+
+export function ThemeToggle({ labels }: { labels: Labels }) {
   const [mode, setMode] = useState<Mode>("system");
 
   useEffect(() => {
@@ -53,7 +54,7 @@ export function ThemeToggle() {
   };
 
   return (
-    <div className="theme" role="group" aria-label="Colour theme">
+    <div className="theme" role="group" aria-label={labels.group}>
       {(["light", "system", "dark"] as Mode[]).map((m) => (
         <button key={m} type="button" aria-pressed={mode === m} aria-label={labels[m]} title={labels[m]} onClick={() => choose(m)}>
           {icons[m]}

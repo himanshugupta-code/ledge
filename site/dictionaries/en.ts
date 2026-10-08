@@ -1,0 +1,121 @@
+const en = {
+  meta: {
+    title: "Ledge: Free Screenshot Manager & Shelf for Mac",
+    description:
+      "Ledge is a free Mac menu bar app that keeps your latest screenshots on a shelf at the top of your screen. Drag, copy, annotate and blur sensitive info.",
+    keywords: [
+      "screenshot manager mac",
+      "mac screenshot organizer",
+      "screenshot shelf",
+      "screenshot tray mac",
+      "drag and drop screenshots",
+      "annotate screenshots mac",
+      "blur sensitive info in screenshot",
+      "pixelate screenshot mac",
+      "menu bar screenshot app",
+      "free screenshot tool for mac",
+      "move screenshots off desktop",
+    ],
+    ogAlt: "Ledge, a shelf of screenshots across the top of a Mac screen",
+  },
+  nav: { main: "Main", privacy: "Privacy", support: "Support", blog: "Blog", github: "GitHub", download: "Download" },
+  theme: { group: "Colour theme", light: "Light theme", system: "System theme", dark: "Dark theme" },
+  hero: {
+    eyebrow: "Ledge",
+    title: "A shelf for your screenshots.",
+    sub: "Your newest screenshots wait along the top of the screen, out of the way until you reach for them.",
+    cta: "Download for Mac",
+    film: "Watch the film",
+    note: "Free. macOS on Apple silicon. Mac App Store version in review.",
+    shelfAlt: "A frosted glass ledge across the top of the screen holding six screenshot thumbnails.",
+  },
+  intro: {
+    line1: "Always there.",
+    line2: "Never in the way.",
+    body: "Rest the pointer against the top edge and the ledge slides down. Move away and it tucks itself back up. No window to manage, no folder to dig through.",
+  },
+  bento: {
+    title: "Everything within reach.",
+    a: { big: "One gesture.", h: "Reach the top edge. Or press a key.", p: "The ledge appears on whichever screen your pointer is on, and tucks away when you are done." },
+    b: { h: "Drag into anything.", p: "Drop a screenshot into Messages, Mail, Slack or a doc. Or copy it in one click." },
+    c: { h: "Keyboard friendly.", p: "Tab to pick, Enter to edit, C to copy, Esc to tuck away." },
+    d: { h: "Quietly tidy.", p: "Lives in the menu bar. No Dock icon. Optionally moves new screenshots off your Desktop." },
+    e: { h: "Peeks when it matters.", p: "A brief peek tells you a new screenshot just landed, then it gets out of the way." },
+    f: { big: "Private by design.", p: "Everything stays on your Mac. No account, no network requests, no analytics." },
+  },
+  editor: {
+    line1: "Mark it up.",
+    line2: "Then send it.",
+    body: "Click any screenshot to open the editor. Annotate with arrows and text, pixelate passwords and keys, adjust the light, crop and rotate. Undo anything.",
+    alt: "The Ledge editor with a tool rail, an annotated screenshot with pixelated keys, and style and adjust panels.",
+  },
+  video: { title: "See it in 40 seconds." },
+  faq: {
+    title: "Questions, answered.",
+    items: [
+      { q: "Is Ledge free?", a: "Yes. Ledge is free to download. There are no ads, subscriptions or accounts." },
+      {
+        q: "Does Ledge collect my screenshots or data?",
+        a: "No. Ledge only reads image files from the screenshot folder you choose. Everything stays on your Mac and Ledge makes no network requests.",
+      },
+      {
+        q: "How do I show the ledge?",
+        a: "Rest the pointer at the top edge of your screen, or press Cmd+Option+L. Move away, or press Esc, to tuck it back up.",
+      },
+    ],
+  },
+  get: {
+    title: "Get Ledge.",
+    body: "Free for Mac. The Mac App Store version is in review. Until it is live, download it from GitHub Releases.",
+    cta: "Download for Mac",
+  },
+  footer: {
+    rights: "© 2026 Himanshu. Ledge is free and keeps everything on your Mac.",
+    privacy: "Privacy policy",
+    support: "Support",
+    source: "Source",
+    blog: "Blog",
+    languages: "Language",
+  },
+  privacy: {
+    title: "Ledge privacy policy",
+    metaTitle: "Privacy policy",
+    desc: "Ledge does not collect, store or transmit any personal data. Your screenshots and settings stay on your Mac.",
+    lead: "Ledge does not collect, store, or transmit any personal data.",
+    items: [
+      "Ledge reads image files only from the screenshot folder you choose.",
+      "Screenshots and Ledge's settings stay on your Mac. Nothing is sent to any server.",
+      "Ledge has no accounts, analytics, advertising, or third-party SDKs.",
+    ],
+    questions: "Questions: open an issue at",
+  },
+  support: {
+    title: "Support",
+    metaTitle: "Support",
+    desc: "Get help with Ledge: first-launch setup, showing the ledge, and how to report a bug or request a feature.",
+    reportPre: "Found a bug or have an idea?",
+    reportLink: "Open an issue on GitHub",
+    startTitle: "Getting started",
+    steps: [
+      "On first launch, choose the folder where your screenshots are saved (the macOS default is Desktop).",
+      "Take a screenshot with Cmd Shift 3.",
+      "Move the pointer to the top edge of the screen, or press Cmd Option L, to show the ledge.",
+    ],
+    emptyTitle: "Nothing appears on the ledge",
+    emptyBody: "Make sure the folder you chose is the one macOS saves screenshots to. Ledge only looks at that folder.",
+  },
+  blog: {
+    title: "Blog",
+    metaTitle: "Blog: Mac screenshot tips",
+    desc: "Practical tips for taking, organizing, annotating and safely sharing screenshots on a Mac.",
+    lead: "Practical tips for screenshots on a Mac.",
+    englishOnly: "Articles are currently available in English.",
+    read: "Read article",
+    minRead: "min read",
+    back: "All articles",
+    home: "Home",
+  },
+};
+
+export default en;
+export type Dict = typeof en;

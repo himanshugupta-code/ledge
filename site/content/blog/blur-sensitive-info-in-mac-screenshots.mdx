@@ -1,0 +1,61 @@
+export const meta = {
+  title: "How to Blur Sensitive Info in a Mac Screenshot Before You Share It",
+  description:
+    "Screenshots leak more than you think: API keys, emails, tokens, faces. Here is a quick, reliable way to hide sensitive details in a Mac screenshot before you send it.",
+  date: "2026-10-09",
+  minutes: 4,
+  keywords: [
+    "blur sensitive info in screenshot",
+    "pixelate screenshot mac",
+    "hide information in screenshot mac",
+    "annotate screenshots mac",
+    "share screenshots safely",
+  ],
+};
+
+You take a screenshot to show a bug, a setting, or a result. Then you paste it into a chat, a ticket or a public issue, and only afterwards notice the API key in the corner, a customer's email in the table, or a notification banner from a private conversation.
+
+Screenshots are the easiest way to leak something by accident. This guide covers what to look for and a quick way to hide it on a Mac.
+
+## What to look for before you share
+
+Scan the whole image, not just the part you meant to show:
+
+- **Secrets:** API keys, tokens, passwords, connection strings, recovery codes.
+- **Personal details:** names, email addresses, phone numbers, addresses, order numbers.
+- **Background clutter:** notification banners, other browser tabs, the menu bar, file paths that include your username.
+- **Faces and photos** of people who have not agreed to be shared.
+
+If you are not sure whether something is sensitive, hide it. Nobody complains about an extra blur.
+
+## Why a plain screenshot is not enough
+
+macOS makes taking a screenshot easy (`Cmd` `Shift` `3` for the screen, `Cmd` `Shift` `4` for a selection). It is less helpful once the image is on your Desktop. The built-in Markup tools in Preview and Quick Look can draw shapes, arrows and text, but they do not give you a dedicated blur or pixelate tool. That pushes many people toward covering text with a box by hand, or opening a full image editor for a ten-second job.
+
+## Three ways to hide information
+
+1. **Cover it with a solid shape.** A filled box cannot be undone, so it is the safest choice for passwords and keys.
+2. **Pixelate it.** Large pixel blocks work well for names, numbers and faces, and they make it obvious that something was hidden on purpose.
+3. **Crop it out.** If the sensitive part is at the edge of the image, cropping removes it entirely.
+
+One rule of thumb: never rely on a light blur for secrets such as keys or passwords. Cover those completely, or crop them out.
+
+## A faster workflow with Ledge
+
+[Ledge](/en/) is a free Mac menu bar app that keeps your latest screenshots on a shelf at the top of your screen, so you do not have to go looking for them on the Desktop. Combining it with the steps above looks like this:
+
+1. Take a screenshot as usual. It lands on the ledge.
+2. Move the pointer to the top edge, or press `Cmd` `Option` `L`, and click the screenshot to open the editor.
+3. Use the pixelate tool on anything sensitive, and add an arrow or a note to the part you actually want people to see.
+4. Copy the result with one click, or drag it straight into Messages, Mail, Slack or a document.
+
+Everything happens on your Mac. Ledge has no account and makes no network requests, so the screenshot you are about to redact never goes anywhere until you send it yourself.
+
+## Quick checklist
+
+- Zoom out and look at the whole screenshot once more.
+- Hide secrets with a solid cover, not a light blur.
+- Check the menu bar, tabs and notifications.
+- Preview the final image before sending it.
+
+If this was useful, [try Ledge](/en/) or read the [privacy policy](/en/privacy/) to see exactly what it does with your files (nothing leaves your Mac).
