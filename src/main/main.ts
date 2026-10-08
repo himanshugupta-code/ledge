@@ -52,6 +52,7 @@ let ledge: LedgeWindow;
 let tray: Tray;
 let watch: FolderWatch | null = null;
 let watchedDir = "";
+let releaseFolderAccess: (() => void) | null = null;
 let reveal: RevealState = initialReveal;
 let revealDisplay: Display | null = null;
 let peekUntil = 0;
@@ -150,7 +151,20 @@ function readMacCaptureLocation(): Promise<string | null> {
 
 async function startWatching(): Promise<void> {
   watch?.close();
-  watchedDir = settings.watchDir ?? defaultScreenshotDir(process.platform, os.homedir(), await readMacCaptureLocation());
+  releaseFolderAccess?.();
+  releaseFolderAccess = null;
+  if (process.mas) {
+    if (!settings.watchDir || !settings.watchBookmark) {
+      await chooseFolder();
+      return;
+    }
+    watchedDir = settings.watchDir;
+    const stop = app.startAccessingSecurityScopedResource(settings.watchBookmark);
+    releaseFolderAccess = () => stop();
+  } else {
+    watchedDir =
+      settings.watchDir ?? defaultScreenshotDir(process.platform, os.homedir(), await readMacCaptureLocation());
+  }
   watch = watchFolder(watchedDir, addCapture, (error) => {
     console.error(`Ledge could not watch ${watchedDir}: ${error.message}`);
   });
@@ -201,11 +215,15 @@ function saveSettings(patch: Partial<Settings>): void {
 async function chooseFolder(): Promise<void> {
   const result = await dialog.showOpenDialog({
     title: "Choose the folder your screenshots are saved to",
-    defaultPath: watchedDir,
+    defaultPath: watchedDir || path.join(os.homedir(), "Desktop"),
     properties: ["openDirectory", "createDirectory"],
+    securityScopedBookmarks: true,
   });
-  if (result.canceled || result.filePaths.length === 0) return;
-  saveSettings({ watchDir: result.filePaths[0] });
+  if (result.canceled || result.filePaths.length === 0) {
+    if (process.mas && !settings.watchBookmark) refreshTray();
+    return;
+  }
+  saveSettings({ watchDir: result.filePaths[0], watchBookmark: result.bookmarks?.[0] ?? null });
   await startWatching();
 }
 
@@ -222,7 +240,7 @@ function refreshTray(): void {
     Menu.buildFromTemplate([
       { label: reveal.mode === "hidden" ? "Show Ledge" : "Hide Ledge", accelerator: settings.shortcut, click: toggleLedge },
       { type: "separator" },
-      { label: `Watching: ${watchedDir.replace(os.homedir(), "~")}`, enabled: false },
+      { label: watchedDir ? `Watching: ${watchedDir.replace(os.homedir(), "~")}` : "Not watching a folder yet", enabled: false },
       { label: "Choose Folder…", click: () => void chooseFolder() },
       {
         label: "Move New Screenshots into Ledge",
@@ -351,6 +369,7 @@ app.on("window-all-closed", () => {});
 app.on("will-quit", () => {
   globalShortcut.unregisterAll();
   watch?.close();
+  releaseFolderAccess?.();
 });
 
 void app.whenReady().then(async () => {

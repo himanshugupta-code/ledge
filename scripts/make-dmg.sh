@@ -11,7 +11,7 @@ fi
 npm install
 npm run build
 rm -rf release
-npx electron-builder --mac dmg --publish never
+npx electron-builder --mac dmg --publish never -c.mac.identity=null
 
 dmg=$(ls -t release/*.dmg | head -n 1)
 destination="$HOME/Downloads/$(basename "$dmg")"
