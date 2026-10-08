@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { ThemeToggle } from "../components/ThemeToggle";
-import { asset, REPO } from "../lib/site";
+import { asset, RELEASE, REPO } from "../lib/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/support/" className="hide-sm">Support</Link>
               <a href={REPO} className="hide-sm">GitHub</a>
               <ThemeToggle />
-              <a href="https://github.com/himanshugupta-code/ledge/releases/latest" className="pill">Download</a>
+              <a href={RELEASE} className="pill">Download</a>
             </nav>
           </div>
         </header>
