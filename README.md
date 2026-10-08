@@ -59,6 +59,18 @@ npm run typecheck # main, preload, renderer and tests
 npm run build     # compile to dist/
 ```
 
+## Build a DMG
+
+On a Mac:
+
+```sh
+npm run dist:mac
+```
+
+This builds Ledge, packages it with electron-builder for your Mac's architecture, and saves `Ledge-<version>-<arch>.dmg` to your Downloads folder. Open the DMG and drag Ledge to Applications.
+
+The app isn't signed with an Apple Developer ID yet, so the first time you open it macOS says it can't verify the developer. Right-click Ledge in Applications and choose **Open**, or allow it under **System Settings → Privacy & Security**. You only need to do this once.
+
 ## How it works
 
 | Path | Role |

@@ -5,6 +5,10 @@
   "description": "A shelf for your screenshots along the top of the screen. Out of the way until you reach for it.",
   "license": "MIT",
   "author": "Himanshu <himanshugupta.dev@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/himanshugupta-code/ledge.git"
+  },
   "main": "dist/main/main.js",
   "private": true,
   "scripts": {
@@ -14,11 +18,8 @@
     "start": "npm run build && electron .",
     "typecheck": "tsc -p tsconfig.node.json --noEmit && tsc -p tsconfig.web.json && tsc -p tsconfig.test.json",
     "test": "vitest run",
-    "test:watch": "vitest"
-  },
-  "dependencies": {
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0"
+    "test:watch": "vitest",
+    "dist:mac": "bash scripts/make-dmg.sh"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
@@ -26,8 +27,45 @@
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.2.0",
     "electron": "^38.8.6",
+    "electron-builder": "^26.15.3",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "typescript": "~5.9.3",
     "vite": "^7.3.7",
     "vitest": "^3.2.7"
+  },
+  "build": {
+    "appId": "dev.himanshu.ledge",
+    "productName": "Ledge",
+    "copyright": "Copyright © 2026 Himanshu",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "assets/**/*",
+      "package.json",
+      "!dist/**/*.map"
+    ],
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.utilities",
+      "identity": null,
+      "extendInfo": {
+        "LSUIElement": true,
+        "NSDesktopFolderUsageDescription": "Ledge watches your screenshot folder so new screenshots appear on the ledge.",
+        "NSDocumentsFolderUsageDescription": "Ledge watches your screenshot folder so new screenshots appear on the ledge.",
+        "NSDownloadsFolderUsageDescription": "Ledge watches your screenshot folder so new screenshots appear on the ledge."
+      }
+    },
+    "dmg": {
+      "title": "Ledge ${version}",
+      "artifactName": "Ledge-${version}-${arch}.${ext}"
+    },
+    "linux": {
+      "target": "dir",
+      "category": "Utility"
+    }
   }
 }
