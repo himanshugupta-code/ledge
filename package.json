@@ -19,7 +19,8 @@
     "typecheck": "tsc -p tsconfig.node.json --noEmit && tsc -p tsconfig.web.json && tsc -p tsconfig.test.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "dist:mac": "bash scripts/make-dmg.sh"
+    "dist:mac": "bash scripts/make-dmg.sh",
+    "dist:mas": "npm run build && electron-builder --mac mas --publish never"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
@@ -51,13 +52,13 @@
     "mac": {
       "target": "dmg",
       "category": "public.app-category.utilities",
-      "identity": null,
       "extendInfo": {
         "LSUIElement": true,
         "NSDesktopFolderUsageDescription": "Ledge watches your screenshot folder so new screenshots appear on the ledge.",
         "NSDocumentsFolderUsageDescription": "Ledge watches your screenshot folder so new screenshots appear on the ledge.",
         "NSDownloadsFolderUsageDescription": "Ledge watches your screenshot folder so new screenshots appear on the ledge."
-      }
+      },
+      "icon": "build/icon.png"
     },
     "dmg": {
       "title": "Ledge ${version}",
@@ -66,6 +67,13 @@
     "linux": {
       "target": "dir",
       "category": "Utility"
+    },
+    "mas": {
+      "entitlements": "build/entitlements.mas.plist",
+      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
+      "provisioningProfile": "build/embedded.provisionprofile",
+      "hardenedRuntime": false,
+      "type": "distribution"
     }
   }
 }
