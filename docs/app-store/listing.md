@@ -33,7 +33,7 @@ Data collected: **None**. The app makes no network requests and has no analytics
 
 ## URLs
 - Support URL: https://github.com/himanshugupta-code/ledge/issues
-- Privacy policy URL: https://github.com/palashgdev/ledge/wiki/Privacy-Policy
+- Privacy policy URL: https://github.com/himanshugupta-code/ledge/wiki/Privacy-Policy
 
 ## Wiki
-These pages are mirrored on the wiki: https://github.com/palashgdev/ledge/wiki
+These pages are mirrored on the wiki: https://github.com/himanshugupta-code/ledge/wiki
