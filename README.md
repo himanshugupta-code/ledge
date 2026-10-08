@@ -13,6 +13,15 @@ Every screenshot you take lands on the ledge. Rest the pointer against the top e
 
 Runs on macOS, Windows and Linux. Built with Electron, React and TypeScript.
 
+## Download
+
+| Mac | Download |
+| :-- | :-- |
+| Apple silicon (M1 and later) | [Ledge-mac-arm64.dmg](https://github.com/himanshugupta-code/ledge/releases/latest/download/Ledge-mac-arm64.dmg) |
+| Intel | [Ledge-mac-x64.dmg](https://github.com/himanshugupta-code/ledge/releases/latest/download/Ledge-mac-x64.dmg) |
+
+Open the DMG and drag Ledge to Applications. The app isn't notarized yet, so the first time you open it, right-click Ledge in Applications and choose **Open**. Every push to `main` builds fresh DMGs and attaches them to the [latest release](https://github.com/himanshugupta-code/ledge/releases/latest).
+
 ## Using it
 
 | Gesture | What happens |
@@ -113,10 +122,6 @@ The app isn't signed with an Apple Developer ID yet, so the first time you open 
 | `src/renderer/editor/EditorApp.tsx` | The editor UI |
 
 Every window runs sandboxed with context isolation. The UI and the screenshots are served from a custom `ledge://` protocol that only hands out the app's own files and the screenshots currently on the ledge, and the editor can only hand back PNG data, which the app writes next to the original.
-
-## Credits
-
-Inspired by [Tendedero](https://github.com/alejandrobujan/tendedero) by Alejandro Buján, a lovely native macOS app built around the same idea. Ledge is an independent, cross-platform take on it with its own code and design.
 
 ## License
 
