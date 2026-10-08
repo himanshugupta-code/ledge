@@ -161,7 +161,10 @@ p.lede { font-size: clamp(1.1rem, 2vw, 1.4rem); line-height: 1.35; color: var(--
 .t-e { grid-column: span 2; }
 .t-f { grid-column: span 6; text-align: center; padding: 56px 34px; }
 .t-a { background: linear-gradient(135deg, #3b3bb8, #8a4bd6 60%, #e0539a); }
-.t-a h3, .t-a p { color: #fff; } .t-a p { opacity: 0.85; }
+.t-a .big, .t-a h3, .t-a p { color: #fff; }
+.t-a h3 { opacity: 0.96; }
+.t-a p { opacity: 0.88; }
+.t-a { box-shadow: 0 18px 50px rgba(110, 80, 214, 0.3); }
 .kbds { margin-top: 18px; display: flex; gap: 8px; flex-wrap: wrap; }
 kbd { background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.28); border-radius: 8px; padding: 3px 10px; font: inherit; font-size: 0.95rem; color: #fff; }
 .doc kbd, .t-c kbd { background: var(--bg-alt); border-color: var(--line); color: var(--fg); }
