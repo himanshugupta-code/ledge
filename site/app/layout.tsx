@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
+import { ThemeToggle } from "../components/ThemeToggle";
 import { asset, REPO } from "../lib/site";
 import "./globals.css";
 
@@ -17,7 +18,14 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem("ledge-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}`,
+          }}
+        />
+      </head>
       <body>
         <header className="nav">
           <div className="wrap">
@@ -29,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/privacy/" className="hide-sm">Privacy</Link>
               <Link href="/support/" className="hide-sm">Support</Link>
               <a href={REPO} className="hide-sm">GitHub</a>
+              <ThemeToggle />
               <a href="https://github.com/himanshugupta-code/ledge/releases/latest" className="pill">Download</a>
             </nav>
           </div>

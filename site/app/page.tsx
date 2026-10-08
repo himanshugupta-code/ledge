@@ -8,11 +8,13 @@ export default function Home() {
       <section className="hero">
         <div className="shelf-wrap">
           <img
-            src={asset("/ledge-dark.png")}
+            className="for-light"
+            src={asset("/ledge-light.png")}
             alt="A frosted glass ledge across the top of the screen holding six screenshot thumbnails."
             width={2560}
             height={336}
           />
+          <img className="for-dark" src={asset("/ledge-dark.png")} alt="" width={2560} height={336} />
         </div>
         <div className="wrap copy">
           <p className="eyebrow">Ledge</p>
