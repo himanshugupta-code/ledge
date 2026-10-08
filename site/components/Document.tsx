@@ -3,7 +3,7 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
 import { getDictionary } from "../dictionaries";
 import type { Locale } from "../lib/i18n";
-import { asset, RELEASE, REPO } from "../lib/site";
+import { asset, DMG_ARM, REPO } from "../lib/site";
 
 /** The full HTML document shell shared by every page and language. */
 export function Document({ lang, children }: { lang: Locale; children: React.ReactNode }) {
@@ -30,7 +30,7 @@ export function Document({ lang, children }: { lang: Locale; children: React.Rea
               <Link href="/en/blog/" className="hide-sm">{t.nav.blog}</Link>
               <a href={REPO} className="hide-sm">{t.nav.github}</a>
               <ThemeToggle labels={t.theme} />
-              <a href={RELEASE} className="pill">{t.nav.download}</a>
+              <a href={DMG_ARM} className="pill">{t.nav.download}</a>
             </nav>
           </div>
         </header>

@@ -6,5 +6,7 @@ export const asset = (path: string) => `${BASE}${path}`;
 export const abs = (path: string) => `${SITE_URL}${path}`;
 export const REPO = "https://github.com/himanshugupta-code/ledge";
 export const RELEASE = `${REPO}/releases/latest`;
+export const DMG_ARM = `${RELEASE}/download/Ledge-mac-arm64.dmg`;
+export const DMG_X64 = `${RELEASE}/download/Ledge-mac-x64.dmg`;
 export const SUPPORT = `${REPO}/issues`;
 export const AUTHOR = { name: "Himanshu", url: "https://github.com/himanshugupta-code" };

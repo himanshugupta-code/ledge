@@ -1,12 +1,50 @@
+import type { ReactNode } from "react";
 import { JsonLd } from "./JsonLd";
 import { Reveal } from "./Reveal";
-import { ScrollScale } from "./ScrollScale";
+import { CaptureDial } from "./home/CaptureDial";
+import { DragDemo } from "./home/DragDemo";
+import { EditorDemo } from "./home/EditorDemo";
+import { KeysDemo } from "./home/KeysDemo";
+import { RevealDemo, ShelfDemo } from "./home/ShelfDemos";
+import { SplitWords } from "./home/SplitWords";
+import { VaultDemo } from "./home/VaultDemo";
 import { getDictionary } from "../dictionaries";
 import type { Locale } from "../lib/i18n";
-import { abs, asset, AUTHOR, RELEASE } from "../lib/site";
+import { abs, asset, AUTHOR, DMG_ARM, DMG_X64, RELEASE } from "../lib/site";
+
+type Sub = { b: string; s: string };
+
+function Feature({ id, color, kicker, title, body, subs, flip = false, children }: { id: string; color: string; kicker: string; title: string; body: string; subs: Sub[]; flip?: boolean; children: ReactNode }) {
+  return (
+    <section className={`m-feature${flip ? " flip" : ""}`} id={id}>
+      <div className="wrap m-feature-grid">
+        <div className="m-copy">
+          <p className="m-kicker" style={{ ["--c" as string]: color }}>
+            <i />
+            {kicker}
+          </p>
+          <SplitWords text={title} className="m-h2" />
+          <p className="m-lead">{body}</p>
+          {subs.length > 0 && (
+            <ul className="m-subs">
+              {subs.map((s) => (
+                <li key={s.b}>
+                  <b>{s.b}</b>
+                  <span>{s.s}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        {children}
+      </div>
+    </section>
+  );
+}
 
 export function HomePage({ lang }: { lang: Locale }) {
   const t = getDictionary(lang);
+  const m = t.motion;
   const home = abs(`/${lang}/`);
 
   const graph = {
@@ -55,81 +93,55 @@ export function HomePage({ lang }: { lang: Locale }) {
   return (
     <>
       <JsonLd data={graph} />
-      <section className="hero">
-        <div className="shelf-wrap">
-          <img className="for-light" src={asset("/ledge-light.png")} alt={t.hero.shelfAlt} width={2560} height={336} />
-          <img className="for-dark" src={asset("/ledge-dark.png")} alt="" width={2560} height={336} />
-        </div>
-        <div className="wrap copy">
-          <p className="eyebrow">{t.hero.eyebrow}</p>
-          <h1>{t.hero.title}</h1>
-          <p className="sub">{t.hero.sub}</p>
-          <div className="cta">
-            <a className="btn" href={RELEASE}>{t.hero.cta}</a>
-            <a className="btn ghost" href="#video">{t.hero.film}</a>
+      <section className="hero m-hero">
+        <div className="wrap m-hero-grid">
+          <div className="m-hero-copy">
+            <p className="eyebrow">{t.hero.eyebrow}</p>
+            <SplitWords as="h1" text={t.hero.title} onLoad />
+            <p className="sub">{t.hero.sub}</p>
+            <div className="cta">
+              <a className="btn" href={DMG_ARM}>{t.hero.cta}</a>
+              <a className="btn ghost" href="#video">{t.hero.film}</a>
+            </div>
+            <p className="note">{t.hero.note}</p>
           </div>
-          <p className="note">{t.hero.note}</p>
+          <CaptureDial label={m.dial.label} countLabel={m.dial.count} />
         </div>
       </section>
 
-      <section className="band center">
-        <div className="wrap">
-          <Reveal as="h2" className="display">
-            {t.intro.line1}
-            <br />
-            <span className="grad">{t.intro.line2}</span>
-          </Reveal>
-          <Reveal as="p" className="lede" delay={120}>{t.intro.body}</Reveal>
-        </div>
-      </section>
+      <Feature id="shelf" color="#ff5a5f" {...m.shelf}>
+        <ShelfDemo label={m.shelf.panel} />
+      </Feature>
 
-      <section className="band alt">
-        <div className="wrap">
-          <Reveal as="h2" className="display center">{t.bento.title}</Reveal>
-          <div className="bento">
-            <Reveal className="tile t-a">
-              <div className="big">{t.bento.a.big}</div>
-              <h3>{t.bento.a.h}</h3>
-              <p>{t.bento.a.p}</p>
-              <div className="kbds"><kbd>⌘</kbd><kbd>⌥</kbd><kbd>L</kbd></div>
-            </Reveal>
-            <Reveal className="tile t-b" delay={100}>
-              <h3>{t.bento.b.h}</h3>
-              <p>{t.bento.b.p}</p>
-            </Reveal>
-            <Reveal className="tile t-c" delay={60}>
-              <h3>{t.bento.c.h}</h3>
-              <p>{t.bento.c.p}</p>
-            </Reveal>
-            <Reveal className="tile t-d" delay={140}>
-              <h3>{t.bento.d.h}</h3>
-              <p>{t.bento.d.p}</p>
-            </Reveal>
-            <Reveal className="tile t-e" delay={220}>
-              <h3>{t.bento.e.h}</h3>
-              <p>{t.bento.e.p}</p>
-            </Reveal>
-            <Reveal className="tile t-f">
-              <div className="big grad">{t.bento.f.big}</div>
-              <p>{t.bento.f.p}</p>
-            </Reveal>
+      <Feature id="reveal" color="#ff9a3c" flip {...m.reveal}>
+        <RevealDemo label={m.reveal.panel} />
+      </Feature>
+
+      <Feature id="drag" color="#ffd43b" {...m.drag}>
+        <DragDemo label={m.drag.panel} hint={m.drag.hint} shared={m.drag.shared} cardLabel={m.drag.card} apps={m.drag.apps} />
+      </Feature>
+
+      <Feature id="editor" color="#3ddc84" flip kicker={m.editor.kicker} title={`${t.editor.line1} ${t.editor.line2}`} body={t.editor.body} subs={m.editor.subs}>
+        <EditorDemo label={m.editor.panel} steps={m.editor.steps} note={m.editor.note} />
+      </Feature>
+
+      <Feature id="keys" color="#2cd4e8" {...m.keys} subs={[]}>
+        <KeysDemo label={m.keys.panel} prompt={m.keys.prompt} none={m.keys.none} actions={m.keys.actions} />
+      </Feature>
+
+      <Feature id="private" color="#5b7cff" flip {...m.privacy} subs={[]}>
+        <div className="m-private">
+          <VaultDemo label={m.privacy.panel} caption={m.privacy.caption} aria={m.privacy.aria} />
+          <div className="m-stats">
+            {m.privacy.stats.map((s) => (
+              <div key={s.l} className="m-stat">
+                <b>{s.v}</b>
+                <span>{s.l}</span>
+              </div>
+            ))}
           </div>
         </div>
-      </section>
-
-      <section className="band center">
-        <div className="wrap">
-          <Reveal as="h2" className="display">
-            {t.editor.line1}
-            <br />
-            <span className="grad">{t.editor.line2}</span>
-          </Reveal>
-          <Reveal as="p" className="lede" delay={120}>{t.editor.body}</Reveal>
-          <ScrollScale>
-            <img src={asset("/editor.png")} alt={t.editor.alt} width={1280} height={820} />
-          </ScrollScale>
-        </div>
-      </section>
+      </Feature>
 
       <section className="band alt center" id="video">
         <div className="wrap">
@@ -156,13 +168,19 @@ export function HomePage({ lang }: { lang: Locale }) {
         </div>
       </section>
 
-      <section className="band alt center">
+      <section className="band alt center m-get">
         <div className="wrap">
-          <Reveal as="h2" className="display">{t.get.title}</Reveal>
+          <div className="m-spectrum" aria-hidden="true">
+            {["#ff5a5f", "#ff9a3c", "#ffd43b", "#3ddc84", "#2cd4e8", "#5b7cff"].map((c) => (
+              <i key={c} style={{ ["--c" as string]: c }} />
+            ))}
+          </div>
+          <SplitWords text={t.get.title} className="display" />
           <Reveal as="p" className="lede" delay={100}>{t.get.body}</Reveal>
           <Reveal delay={200}>
-            <p style={{ marginTop: 32 }}>
-              <a className="btn" href={RELEASE}>{t.get.cta}</a>
+            <p className="m-get-cta">
+              <a className="btn" href={DMG_ARM}>{t.get.cta}</a>
+              <a className="btn ghost" href={DMG_X64}>{m.x64}</a>
             </p>
           </Reveal>
         </div>
