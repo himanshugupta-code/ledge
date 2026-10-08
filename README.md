@@ -17,14 +17,37 @@ Runs on macOS, Windows and Linux. Built with Electron, React and TypeScript.
 | :-- | :-- |
 | Rest the pointer at the top edge | The ledge slides down on that screen |
 | <kbd>Cmd/Ctrl</kbd> <kbd>Alt</kbd> <kbd>L</kbd> | Show or hide the ledge |
-| Click | Copy the image to the clipboard |
-| Double-click | Open it in your default image app |
+| Click | Open it in the editor |
+| Copy button (top right of a card) | Copy the image to the clipboard |
 | Drag into another app or folder | Share or save a copy |
 | Right-click | Show the file in Finder / Explorer |
 | Click the × | Take it off the ledge |
 | <kbd>Esc</kbd> | Tuck the ledge away |
 
-The keyboard works too: <kbd>Tab</kbd> to a screenshot, <kbd>Enter</kbd> to copy, <kbd>Shift</kbd> <kbd>Enter</kbd> to open, <kbd>Delete</kbd> to remove.
+The keyboard works too: <kbd>Tab</kbd> to a screenshot, <kbd>Enter</kbd> to edit, <kbd>C</kbd> to copy, <kbd>Delete</kbd> to remove.
+
+## Editing
+
+<img src="docs/editor.png" alt="The Ledge editor: a tool rail on the left, a screenshot of an API keys page in the middle with the secret keys pixelated, a red box and arrow around the Create key button with the note Rotate these keys before launch, and style, adjust and transform panels on the right.">
+
+Click any screenshot to open it in the editor.
+
+- **Annotate** with arrows, lines, rectangles, ellipses, a pen, a highlighter and text. Hold <kbd>Shift</kbd> to draw straight lines at 45° steps, or squares and circles.
+- **Pixelate** passwords, keys and personal details before you share a screenshot.
+- **Adjust** brightness, contrast, saturation, warmth and black & white.
+- **Crop, rotate and flip**, with your annotations moving along with the image.
+- **Select** a shape to move it, recolor it or delete it. Everything can be undone.
+
+**Save** writes an edited copy next to the original and puts it on the ledge; the original is never touched. **Save As…** lets you choose where, and **Copy** puts the result on the clipboard.
+
+| Shortcut | Action |
+| :-- | :-- |
+| <kbd>V</kbd> <kbd>C</kbd> <kbd>A</kbd> <kbd>L</kbd> <kbd>R</kbd> <kbd>O</kbd> <kbd>P</kbd> <kbd>H</kbd> <kbd>T</kbd> <kbd>X</kbd> | Select, Crop, Arrow, Line, Rectangle, Ellipse, Pen, Highlighter, Text, Pixelate |
+| <kbd>Cmd/Ctrl</kbd> <kbd>Z</kbd> · <kbd>Shift</kbd> <kbd>Cmd/Ctrl</kbd> <kbd>Z</kbd> | Undo · Redo |
+| <kbd>Cmd/Ctrl</kbd> <kbd>C</kbd> · <kbd>S</kbd> · <kbd>Shift</kbd> <kbd>S</kbd> | Copy · Save · Save As |
+| <kbd>Cmd/Ctrl</kbd> <kbd>+</kbd> · <kbd>−</kbd> · <kbd>0</kbd> | Zoom in · Zoom out · Fit |
+| <kbd>Delete</kbd> | Delete the selected shape |
+| <kbd>Enter</kbd> · <kbd>Esc</kbd> | Apply · Cancel a crop |
 
 ## Settings
 
@@ -80,10 +103,14 @@ The app isn't signed with an Apple Developer ID yet, so the first time you open 
 | `src/main/watcher.ts` | Watches the screenshot folder and waits for files to finish writing |
 | `src/core/reveal.ts` | The top-edge reveal logic as a pure state machine |
 | `src/core/shelf.ts` | Adding, removing and limiting screenshots on the ledge |
-| `src/preload/preload.ts` | The small, typed API the window is allowed to use |
-| `src/renderer/` | The React UI |
+| `src/main/editorWindow.ts` | The editor window |
+| `src/preload/preload.ts` | The small, typed API the windows are allowed to use |
+| `src/renderer/` | The React UI for the ledge |
+| `src/renderer/editor/model.ts` | The editor document: shapes, rotate/flip/crop math, hit-testing and undo history |
+| `src/renderer/editor/render.ts` | Draws the adjusted image, annotations and pixelation onto a canvas |
+| `src/renderer/editor/EditorApp.tsx` | The editor UI |
 
-The window runs sandboxed with context isolation. The UI and the thumbnails are served from a custom `ledge://` protocol that only hands out the app's own files and the screenshots currently on the ledge.
+Every window runs sandboxed with context isolation. The UI and the screenshots are served from a custom `ledge://` protocol that only hands out the app's own files and the screenshots currently on the ledge, and the editor can only hand back PNG data, which the app writes next to the original.
 
 ## Credits
 

@@ -108,6 +108,7 @@ body,
 
 .thumb {
   display: block;
+  cursor: pointer;
   position: relative;
   width: 168px;
   height: 104px;
@@ -119,7 +120,6 @@ body,
   box-shadow: var(--card-shadow);
   outline: 1px solid var(--card-ring);
   outline-offset: -1px;
-  cursor: grab;
   transition:
     transform 160ms var(--ease),
     box-shadow 160ms var(--ease);
@@ -131,7 +131,6 @@ body,
 }
 
 .thumb:active {
-  cursor: grabbing;
   transform: translateY(-1px) scale(0.985);
 }
 
@@ -177,10 +176,9 @@ body,
   transform: none;
 }
 
-.remove {
+.corner {
   position: absolute;
   top: -7px;
-  left: -7px;
   width: 20px;
   height: 20px;
   padding: 0;
@@ -201,21 +199,31 @@ body,
     transform 120ms var(--ease);
 }
 
-.remove svg {
-  width: 10px;
-  height: 10px;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  stroke-linecap: round;
+.remove {
+  left: -7px;
 }
 
-.card:hover .remove,
-.card:focus-within .remove {
+.copy {
+  right: -7px;
+}
+
+.corner svg {
+  width: 10px;
+  height: 10px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.card:hover .corner,
+.card:focus-within .corner {
   opacity: 1;
   transform: none;
 }
 
-.remove:focus-visible {
+.corner:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 1px;
 }
@@ -240,7 +248,7 @@ body,
   .ledge,
   .thumb,
   .badge,
-  .remove {
+  .corner {
     transition: none;
   }
 }

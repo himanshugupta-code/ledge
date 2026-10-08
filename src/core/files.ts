@@ -28,3 +28,26 @@ export function isRecentlyCreated(birthtimeMs: number, mtimeMs: number, now: num
   const created = birthtimeMs > 0 ? birthtimeMs : mtimeMs;
   return now - created <= RECENT_WINDOW_MS;
 }
+
+export function editedName(original: string): string {
+  const base = path.basename(original);
+  const ext = path.extname(base);
+  const stem = ext && ext !== base ? base.slice(0, -ext.length) : base;
+  return `${stem} edited.png`;
+}
+
+export function withPngExtension(file: string): string {
+  return path.extname(file).toLowerCase() === ".png" ? file : `${file}.png`;
+}
+
+const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+export const MAX_IMAGE_BYTES = 200 * 1024 * 1024;
+
+export function isPng(data: unknown): data is Uint8Array {
+  return (
+    data instanceof Uint8Array &&
+    data.length > PNG_SIGNATURE.length &&
+    data.length <= MAX_IMAGE_BYTES &&
+    PNG_SIGNATURE.every((byte, i) => data[i] === byte)
+  );
+}

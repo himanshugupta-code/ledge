@@ -1,9 +1,11 @@
 import { execFile } from "node:child_process";
+import fs from "node:fs";
 import { randomUUID } from "node:crypto";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import {
+  BrowserWindow,
   Menu,
   Tray,
   app,
@@ -19,12 +21,13 @@ import {
   type Display,
 } from "electron";
 import { resolveAppFile } from "../core/appPath";
-import { isInside } from "../core/files";
+import { editedName, isInside, isPng, uniqueName, withPngExtension } from "../core/files";
 import { initialReveal, nextReveal, toggle, type RevealState } from "../core/reveal";
 import { defaultScreenshotDir } from "../core/screenshotDir";
 import { addItem, findItem, parseShelf, removeItem, type ShelfItem } from "../core/shelf";
 import { parseSettings, type Settings } from "../core/settings";
-import { Channels, ITEM_PROTOCOL, itemUrl, type LedgeItem } from "../shared/api";
+import { Channels, ITEM_PROTOCOL, itemUrl, type EditorItem, type LedgeItem, type SaveResult } from "../shared/api";
+import { createEditorWindow } from "./editorWindow";
 import { LedgeWindow } from "./ledgeWindow";
 import { fileExists, moveInto, readJson, writeJson } from "./storage";
 import { watchFolder, type FolderWatch } from "./watcher";
@@ -52,6 +55,8 @@ let watchedDir = "";
 let reveal: RevealState = initialReveal;
 let revealDisplay: Display | null = null;
 let peekUntil = 0;
+const editors = new Map<number, ShelfItem>();
+const editorWindows = new Map<string, BrowserWindow>();
 
 function toLedgeItem(item: ShelfItem): LedgeItem {
   return { id: item.id, name: item.name, src: itemUrl(item.id, item.addedAt), addedAt: item.addedAt };
@@ -69,6 +74,19 @@ function letGo(gone: ShelfItem[]): void {
   }
 }
 
+function addToShelf(file: string, owned: boolean): void {
+  const result = addItem(items, {
+    id: randomUUID(),
+    path: file,
+    name: path.basename(file),
+    addedAt: Date.now(),
+    owned,
+  });
+  items = result.items;
+  letGo(result.evicted);
+  publish();
+}
+
 function addCapture(file: string): void {
   if (items.some((item) => item.path === file)) return;
   let target = file;
@@ -81,17 +99,37 @@ function addCapture(file: string): void {
       target = file;
     }
   }
-  const result = addItem(items, {
-    id: randomUUID(),
-    path: target,
-    name: path.basename(target),
-    addedAt: Date.now(),
-    owned,
-  });
-  items = result.items;
-  letGo(result.evicted);
-  publish();
+  addToShelf(target, owned);
   if (settings.peekOnCapture && reveal.mode === "hidden") peek();
+}
+
+function openEditor(id: string): void {
+  const item = findItem(items, id);
+  if (!item) return;
+  applyReveal(initialReveal, displayUnderCursor());
+  const existing = editorWindows.get(item.id);
+  if (existing && !existing.isDestroyed()) {
+    existing.show();
+    existing.focus();
+    return;
+  }
+  const window = createEditorWindow(`${item.name} — Ledge`);
+  const contentsId = window.webContents.id;
+  editors.set(contentsId, { ...item });
+  editorWindows.set(item.id, window);
+  window.on("closed", () => {
+    editors.delete(contentsId);
+    editorWindows.delete(item.id);
+  });
+}
+
+function writePng(target: string, png: Uint8Array): SaveResult {
+  try {
+    fs.writeFileSync(target, png);
+    return { ok: true, name: path.basename(target) };
+  } catch (error) {
+    return { ok: false, error: `Couldn’t save: ${(error as Error).message}` };
+  }
 }
 
 function remove(id: string): void {
@@ -244,6 +282,47 @@ function registerIpc(): void {
   ipcMain.on(Channels.remove, (_event, id) => {
     if (typeof id === "string") remove(id);
   });
+  ipcMain.on(Channels.edit, (_event, id) => {
+    if (typeof id === "string") openEditor(id);
+  });
+  ipcMain.handle(Channels.editorItem, (event): EditorItem | null => {
+    const item = editors.get(event.sender.id);
+    return item ? { id: item.id, name: item.name, src: itemUrl(item.id, item.addedAt) } : null;
+  });
+  ipcMain.handle(Channels.editorCopy, (event, png: unknown) => {
+    if (!editors.has(event.sender.id) || !isPng(png)) return false;
+    const image = nativeImage.createFromBuffer(Buffer.from(png));
+    if (image.isEmpty()) return false;
+    clipboard.writeImage(image);
+    return true;
+  });
+  ipcMain.handle(Channels.editorSave, (event, png: unknown): SaveResult => {
+    const item = editors.get(event.sender.id);
+    if (!item || !isPng(png)) return { ok: false, error: "Couldn’t save this image." };
+    const dir = path.dirname(item.path);
+    let target: string;
+    try {
+      target = path.join(dir, uniqueName(editedName(item.name), new Set(fs.readdirSync(dir))));
+    } catch (error) {
+      return { ok: false, error: `Couldn’t save: ${(error as Error).message}` };
+    }
+    const result = writePng(target, png);
+    if (result.ok) addToShelf(target, isInside(target, capturesDir()));
+    return result;
+  });
+  ipcMain.handle(Channels.editorSaveAs, async (event, png: unknown): Promise<SaveResult> => {
+    const item = editors.get(event.sender.id);
+    if (!item || !isPng(png)) return { ok: false, error: "Couldn’t save this image." };
+    const owner = BrowserWindow.fromWebContents(event.sender);
+    const options = {
+      title: "Save Image",
+      defaultPath: path.join(path.dirname(item.path), editedName(item.name)),
+      filters: [{ name: "PNG Image", extensions: ["png"] }],
+    };
+    const choice = owner ? await dialog.showSaveDialog(owner, options) : await dialog.showSaveDialog(options);
+    if (choice.canceled || !choice.filePath) return { ok: false };
+    return writePng(withPngExtension(choice.filePath), png);
+  });
   ipcMain.on(Channels.dismiss, () => {
     peekUntil = 0;
     applyReveal(initialReveal, displayUnderCursor());
@@ -256,15 +335,14 @@ function registerProtocol(): void {
   const rendererRoot = path.join(__dirname, "..", "renderer");
   protocol.handle(ITEM_PROTOCOL, (request) => {
     const url = new URL(request.url);
-    if (url.hostname === "app") {
-      const file = resolveAppFile(rendererRoot, url.pathname);
-      return file ? net.fetch(pathToFileURL(file).toString()) : notFound();
-    }
-    if (url.hostname === "item") {
-      const item = findItem(items, decodeURIComponent(url.pathname.slice(1)));
+    if (url.hostname !== "app") return notFound();
+    if (url.pathname.startsWith("/item/")) {
+      const id = decodeURIComponent(url.pathname.slice("/item/".length));
+      const item = findItem(items, id) ?? [...editors.values()].find((entry) => entry.id === id);
       return item ? net.fetch(pathToFileURL(item.path).toString()) : notFound();
     }
-    return notFound();
+    const file = resolveAppFile(rendererRoot, url.pathname);
+    return file ? net.fetch(pathToFileURL(file).toString()) : notFound();
   });
 }
 

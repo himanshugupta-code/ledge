@@ -1,8 +1,13 @@
 import { contextBridge, ipcRenderer, type IpcRendererEvent } from "electron";
-import type { Channels as SharedChannels, LedgeApi, LedgeItem } from "../shared/api";
+import type { Channels as SharedChannels, EditorApi, LedgeApi, LedgeItem } from "../shared/api";
 
 const Channels: typeof SharedChannels = {
   getItems: "ledge:get-items",
+  edit: "ledge:edit",
+  editorItem: "editor:item",
+  editorCopy: "editor:copy",
+  editorSave: "editor:save",
+  editorSaveAs: "editor:save-as",
   items: "ledge:items",
   reveal: "ledge:reveal",
   copy: "ledge:copy",
@@ -23,6 +28,7 @@ function subscribe<T>(channel: string, listener: (value: T) => void) {
 
 const api: LedgeApi = {
   getItems: () => ipcRenderer.invoke(Channels.getItems),
+  edit: (id) => ipcRenderer.send(Channels.edit, id),
   onItems: (listener) => subscribe<LedgeItem[]>(Channels.items, listener),
   onReveal: (listener) => subscribe<boolean>(Channels.reveal, listener),
   copy: (id) => ipcRenderer.invoke(Channels.copy, id),
@@ -33,4 +39,12 @@ const api: LedgeApi = {
   dismiss: () => ipcRenderer.send(Channels.dismiss),
 };
 
+const editor: EditorApi = {
+  getItem: () => ipcRenderer.invoke(Channels.editorItem),
+  copy: (png) => ipcRenderer.invoke(Channels.editorCopy, png),
+  save: (png) => ipcRenderer.invoke(Channels.editorSave, png),
+  saveAs: (png) => ipcRenderer.invoke(Channels.editorSaveAs, png),
+};
+
 contextBridge.exposeInMainWorld("ledge", api);
+contextBridge.exposeInMainWorld("ledgeEditor", editor);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { RECENT_WINDOW_MS, isImageFile, isInside, isRecentlyCreated, uniqueName } from "./files";
+import { RECENT_WINDOW_MS, editedName, isImageFile, isInside, isPng, isRecentlyCreated, uniqueName, withPngExtension } from "./files";
 
 describe("isImageFile", () => {
   it("accepts common screenshot formats regardless of case", () => {
@@ -51,5 +51,34 @@ describe("isRecentlyCreated", () => {
   it("falls back to the modified time when the filesystem has no birth time", () => {
     expect(isRecentlyCreated(0, now - 500, now)).toBe(true);
     expect(isRecentlyCreated(0, now - RECENT_WINDOW_MS - 1, now)).toBe(false);
+  });
+});
+
+describe("editedName", () => {
+  it("adds an edited suffix and a png extension", () => {
+    expect(editedName("Screenshot 2026-10-08 at 10.12.jpg")).toBe("Screenshot 2026-10-08 at 10.12 edited.png");
+    expect(editedName("/shots/capture")).toBe("capture edited.png");
+  });
+});
+
+describe("withPngExtension", () => {
+  it("appends .png only when missing", () => {
+    expect(withPngExtension("/a/shot")).toBe("/a/shot.png");
+    expect(withPngExtension("/a/shot.PNG")).toBe("/a/shot.PNG");
+  });
+});
+
+describe("isPng", () => {
+  const signature = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+
+  it("accepts PNG bytes", () => {
+    expect(isPng(new Uint8Array([...signature, 0, 0, 0]))).toBe(true);
+  });
+
+  it("rejects other data", () => {
+    expect(isPng(new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0, 0, 0, 0, 0]))).toBe(false);
+    expect(isPng(new Uint8Array(signature))).toBe(false);
+    expect(isPng("png")).toBe(false);
+    expect(isPng(null)).toBe(false);
   });
 });
