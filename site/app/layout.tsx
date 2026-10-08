@@ -19,27 +19,30 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <div className="wrap">
-          <header className="site">
+        <header className="nav">
+          <div className="wrap">
             <Link href="/" className="brand">
-              <img src={asset("/icon.png")} alt="" width={32} height={32} />
+              <img src={asset("/icon.png")} alt="" width={22} height={22} />
               Ledge
             </Link>
             <nav aria-label="Main">
-              <Link href="/privacy/">Privacy</Link>
-              <Link href="/support/">Support</Link>
-              <a href={REPO}>GitHub</a>
+              <Link href="/privacy/" className="hide-sm">Privacy</Link>
+              <Link href="/support/" className="hide-sm">Support</Link>
+              <a href={REPO} className="hide-sm">GitHub</a>
+              <a href="https://github.com/himanshugupta-code/ledge/releases/latest" className="pill">Download</a>
             </nav>
-          </header>
-          <main>{children}</main>
-          <footer className="site">
-            <span>© 2026 Himanshu</span>
+          </div>
+        </header>
+        <main>{children}</main>
+        <footer className="site">
+          <div className="wrap">
+            <span>© 2026 Himanshu. Ledge is free and keeps everything on your Mac.</span>
             <span>
-              <Link href="/privacy/">Privacy policy</Link> · <Link href="/support/">Support</Link> ·{" "}
+              <Link href="/privacy/">Privacy policy</Link> &nbsp;·&nbsp; <Link href="/support/">Support</Link> &nbsp;·&nbsp;{" "}
               <a href={REPO}>Source</a>
             </span>
-          </footer>
-        </div>
+          </div>
+        </footer>
       </body>
     </html>
   );
