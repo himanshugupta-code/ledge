@@ -54,6 +54,7 @@
       "category": "public.app-category.utilities",
       "extendInfo": {
         "LSUIElement": true,
+        "ITSAppUsesNonExemptEncryption": false,
         "NSDesktopFolderUsageDescription": "Ledge watches your screenshot folder so new screenshots appear on the ledge.",
         "NSDocumentsFolderUsageDescription": "Ledge watches your screenshot folder so new screenshots appear on the ledge.",
         "NSDownloadsFolderUsageDescription": "Ledge watches your screenshot folder so new screenshots appear on the ledge."
