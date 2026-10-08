@@ -2,6 +2,8 @@
 
 A shelf for your screenshots along the top of the screen. Out of the way until you reach for it.
 
+<a href="docs/ledge-intro.mp4"><img src="docs/ledge-intro-poster.jpg" alt="Play the 40-second Ledge intro video: screenshots landing on the ledge, the pointer revealing it from the top edge, copying and dragging a screenshot, and the editor annotating and pixelating an image." width="100%"></a>
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/ledge-dark.png">
   <img src="docs/ledge-light.png" alt="A frosted glass ledge across the top of the screen holding six screenshot thumbnails. The pointer rests on one, which lifts slightly and shows a remove button.">
