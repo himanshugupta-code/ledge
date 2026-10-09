@@ -1,6 +1,7 @@
 import { JsonLd } from "./JsonLd";
 import { Reveal } from "./Reveal";
 import { SplitWords } from "./home/SplitWords";
+import { GameSection } from "./home/GameSection";
 import { Story } from "./home/Story";
 import { getDictionary } from "../dictionaries";
 import type { Locale } from "../lib/i18n";
@@ -88,7 +89,9 @@ export function HomePage({ lang }: { lang: Locale }) {
         </div>
       </section>
 
-      <section className="band">
+      <GameSection t={t.game} />
+
+      <section className="band alt">
         <div className="wrap faq">
           <Reveal as="h2" className="display center">{t.faq.title}</Reveal>
           <Reveal>
@@ -102,7 +105,7 @@ export function HomePage({ lang }: { lang: Locale }) {
         </div>
       </section>
 
-      <section className="band alt center m-get">
+      <section className="band center m-get">
         <div className="wrap">
           <div className="m-spectrum" aria-hidden="true">
             {["#ff5a5f", "#ff9a3c", "#ffd43b", "#3ddc84", "#2cd4e8", "#5b7cff"].map((c) => (

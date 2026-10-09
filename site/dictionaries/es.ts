@@ -131,6 +131,14 @@ const es: Dict = {
     alt: "El editor de Ledge con barra de herramientas, una captura anotada con claves pixeladas y paneles de estilo y ajustes.",
   },
   video: { title: "Míralo en 40 segundos." },
+  game: {
+    title: "Tómate un respiro. Atrapa capturas.",
+    body: "Shelf Catch es un pequeño juego hecho en Unity. Desliza el estante para atrapar las capturas que caen y esquiva el desorden del escritorio. Tres fallos y se acabó.",
+    play: "Jugar a Shelf Catch",
+    hint: "Muévete con el ratón, un dedo o las flechas.",
+    loading: "Cargando el juego…",
+    full: "Abrir a pantalla completa",
+  },
   faq: {
     title: "Preguntas frecuentes.",
     items: [

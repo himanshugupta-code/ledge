@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Shelf Catch · Ledge</title>
+<style>
+html, body { margin: 0; height: 100%; background: #0d0e14; overflow: hidden; }
+canvas { display: block; width: 100%; height: 100%; outline: none; touch-action: none; }
+#load { position: fixed; inset: 0; display: grid; place-content: center; gap: 14px; color: #9aa3c4; font: 500 15px -apple-system, BlinkMacSystemFont, "Inter", sans-serif; text-align: center; transition: opacity 0.4s; }
+#bar { width: 220px; height: 4px; border-radius: 4px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+#bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ff5a5f, #ff9a3c, #ffd43b, #3ddc84, #2cd4e8, #5b7cff); transition: width 0.2s; }
+</style>
+</head>
+<body>
+<canvas id="c" tabindex="-1"></canvas>
+<div id="load"><span>Shelf Catch</span><div id="bar"><i></i></div></div>
+<script src="Build/game.loader.js"></script>
+<script>
+const canvas = document.getElementById("c");
+const load = document.getElementById("load");
+const bar = document.querySelector("#bar i");
+createUnityInstance(canvas, {
+  dataUrl: "Build/game.data.unityweb",
+  frameworkUrl: "Build/game.framework.js.unityweb",
+  codeUrl: "Build/game.wasm.unityweb",
+  companyName: "Ledge",
+  productName: "Shelf Catch",
+  productVersion: "1.0",
+  devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+}, (p) => { bar.style.width = `${Math.round(p * 100)}%`; }).then(() => {
+  load.style.opacity = "0";
+  setTimeout(() => load.remove(), 400);
+  canvas.focus();
+}).catch((e) => { load.firstChild.textContent = String(e); });
+canvas.addEventListener("pointerdown", () => canvas.focus());
+</script>
+</body>
+</html>
