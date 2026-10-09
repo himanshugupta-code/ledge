@@ -66,13 +66,15 @@
   }
 }
 * { box-sizing: border-box; }
+button, input, textarea, select { font-family: inherit; }
 html { color-scheme: light dark; scroll-behavior: smooth; }
 body, .nav, .tile, footer.site, section.band.alt { transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease; }
 body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font: 17px/1.47 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 17px/1.47 var(--font-inter), -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-feature-settings: "cv11", "ss01";
   letter-spacing: -0.022em;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;

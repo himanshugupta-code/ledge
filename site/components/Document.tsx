@@ -1,3 +1,4 @@
+import { Inter } from "next/font/google";
 import Link from "next/link";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
@@ -5,11 +6,13 @@ import { getDictionary } from "../dictionaries";
 import type { Locale } from "../lib/i18n";
 import { asset, DMG_ARM, REPO } from "../lib/site";
 
+const inter = Inter({ subsets: ["latin", "latin-ext"], display: "swap", variable: "--font-inter" });
+
 /** The full HTML document shell shared by every page and language. */
 export function Document({ lang, children }: { lang: Locale; children: React.ReactNode }) {
   const t = getDictionary(lang);
   return (
-    <html lang={lang} suppressHydrationWarning>
+    <html lang={lang} className={inter.variable} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
