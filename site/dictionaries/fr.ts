@@ -36,7 +36,7 @@ const fr: Dict = {
       kicker: "L'étagère",
       title: "Chaque capture se pose sur l'étagère.",
       body: "Ledge surveille le dossier où vos captures arrivent déjà. Faites-en une comme d'habitude, elle glisse sur l'étagère un instant plus tard.",
-      panel: "Démo · nouvelles captures",
+      panel: "Nouvelles captures",
       subs: [
         { b: "Aucun réglage", s: "Suit automatiquement votre dossier de captures." },
         { b: "Les plus récentes d'abord", s: "Les anciennes captures sortent au bout de l'étagère." },
@@ -47,7 +47,7 @@ const fr: Dict = {
       kicker: "L'apparition",
       title: "Visez le bord supérieur.",
       body: "Posez le pointeur en haut de n'importe quel écran et l'étagère descend. Éloignez-vous et elle se range toute seule.",
-      panel: "Démo · apparition par le haut",
+      panel: "Apparition par le haut",
       subs: [
         { b: "Tous les écrans", s: "L'étagère descend sur l'écran où se trouve le pointeur." },
         { b: "⌘ ⌥ L", s: "Affichez-la ou masquez-la au clavier." },
@@ -58,7 +58,7 @@ const fr: Dict = {
       kicker: "Glisser et copier",
       title: "Glissez-la n'importe où. Essayez.",
       body: "Tirez une capture de l'étagère vers une discussion, un e-mail ou un dossier. Ou copiez-la en un clic.",
-      panel: "Interactif · glissez la capture",
+      panel: "Glissez la capture",
       hint: "Glissez-moi sur une app",
       card: "Une capture que vous pouvez glisser",
       shared: "Partagée dans {app}",
@@ -75,7 +75,7 @@ const fr: Dict = {
     },
     editor: {
       kicker: "L'éditeur",
-      panel: "Démo · avance au défilement",
+      panel: "Avance au défilement",
       note: "Changez ces clés avant le lancement",
       steps: { box: "Rectangle", arrow: "Flèche", text: "Texte", pixelate: "Pixeliser", adjust: "Réglages" },
       subs: [
@@ -88,7 +88,7 @@ const fr: Dict = {
       kicker: "Raccourcis",
       title: "Tout a sa touche.",
       body: "Appuyez sur une touche de votre clavier ou touchez-en une ici. Les touches en surbrillance font quelque chose dans Ledge.",
-      panel: "Interactif · appuyez sur une touche",
+      panel: "Appuyez sur une touche",
       prompt: "Appuyez sur une touche",
       none: "Ce n'est pas un raccourci de Ledge. Essayez une touche en surbrillance.",
       actions: {
@@ -115,7 +115,7 @@ const fr: Dict = {
       title: "Vos captures ne quittent jamais votre Mac.",
       body: "Pas de compte, pas d'analyse et aucune requête réseau. Ledge lit uniquement le dossier que vous lui indiquez.",
       panel: "Votre Mac",
-      caption: "VOTRE MAC",
+      caption: "Votre Mac",
       aria: "Des cartes de captures flottent dans un cercle fermé qui représente votre Mac",
       stats: [
         { v: "0", l: "Comptes" },
@@ -129,6 +129,11 @@ const fr: Dict = {
     line2: "Puis envoyez.",
     body: "Cliquez sur une capture pour ouvrir l'éditeur. Annotez avec des flèches et du texte, pixellisez mots de passe et clés, réglez la lumière, recadrez et pivotez. Annulez tout.",
     alt: "L'éditeur de Ledge avec sa barre d'outils, une capture annotée aux clés pixellisées et les panneaux de style et de réglages.",
+  },
+  film: {
+    hint: "Faites défiler pour ouvrir",
+    aria: "Un court film sur une capture. Un portable s’ouvre, une capture est prise et s’envole sur l’étagère de Ledge.",
+    captions: ["Tout commence sur votre Mac.", "Vous faites une capture, comme d’habitude.", "Ledge l’attrape dès qu’elle est prise.", "Et la garde sur une étagère, à portée de main."],
   },
   video: { title: "Découvrez-le en 40 secondes." },
   game: {

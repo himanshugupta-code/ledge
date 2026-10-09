@@ -7,6 +7,7 @@ import { DragDemo, type DragApp } from "./DragDemo";
 import { EditorDemo } from "./EditorDemo";
 import { KeysDemo, type KeyActions } from "./KeysDemo";
 import { RevealDemo, ShelfDemo } from "./ShelfDemos";
+import { HeroMarquee } from "./HeroMarquee";
 import { SplitWords } from "./SplitWords";
 import { VaultDemo } from "./VaultDemo";
 import { EDITOR_PROGRESS, clamp01, easeInOut, prefersReducedMotion } from "../../lib/motion";
@@ -163,11 +164,13 @@ export function Story(props: StoryProps) {
     <div className="m-story" ref={root}>
       <div className="m-story-text">
         <div className="m-block m-block-hero">
-          <p className="eyebrow">{hero.eyebrow}</p>
-          <SplitWords as="h1" text={hero.title} onLoad />
+          <HeroMarquee text={hero.title} />
           <p className="sub">{hero.sub}</p>
           <div className="cta">
-            <a className="btn" href={hero.href}>{hero.cta}</a>
+            <a className="btn" href={hero.href}>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              {hero.cta}
+            </a>
             <a className="btn ghost" href="#video">{hero.film}</a>
           </div>
           <p className="note">{hero.note}</p>
@@ -181,7 +184,6 @@ export function Story(props: StoryProps) {
           <article key={f.id} id={f.id} className="m-block m-block-feature" style={{ ["--c" as string]: f.color }}>
             <p className="m-kicker">
               <i />
-              <span className="m-num">{String(i + 1).padStart(2, "0")}</span>
               {f.kicker}
             </p>
             <SplitWords text={f.title} className="m-h2" />
@@ -228,7 +230,7 @@ export function Story(props: StoryProps) {
               ))}
             </div>
             <span>
-              {String(Math.max(active, 0) + 1).padStart(2, "0")} / {String(features.length).padStart(2, "0")} · {features[Math.max(active, 0)].kicker}
+              {features[Math.max(active, 0)].kicker}
             </span>
           </div>
         </div>

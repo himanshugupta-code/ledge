@@ -39,7 +39,7 @@ const en = {
       kicker: "The shelf",
       title: "Every capture lands on the ledge.",
       body: "Ledge watches the folder your screenshots already go to. Take one the usual way and it slides onto the shelf a moment later.",
-      panel: "Demo · new captures",
+      panel: "New captures",
       subs: [
         { b: "Zero setup", s: "Follows your screenshot folder automatically." },
         { b: "Newest first", s: "Older captures roll off the end of the shelf." },
@@ -50,7 +50,7 @@ const en = {
       kicker: "The reveal",
       title: "Reach for the top edge.",
       body: "Rest the pointer against the top of any screen and the ledge slides down. Move away and it tucks itself back up.",
-      panel: "Demo · top-edge reveal",
+      panel: "Top-edge reveal",
       subs: [
         { b: "Every display", s: "The ledge drops on whichever screen your pointer is on." },
         { b: "⌘ ⌥ L", s: "Show or hide it from the keyboard." },
@@ -61,7 +61,7 @@ const en = {
       kicker: "Drag & copy",
       title: "Drag it anywhere. Try it.",
       body: "Pull a screenshot off the ledge into a chat, an email or a folder. Or copy it in one click.",
-      panel: "Interactive · drag the screenshot",
+      panel: "Drag the screenshot",
       hint: "Drag me onto an app",
       card: "A screenshot you can drag",
       shared: "Shared to {app}",
@@ -78,7 +78,7 @@ const en = {
     },
     editor: {
       kicker: "The editor",
-      panel: "Demo · plays as you scroll",
+      panel: "Plays as you scroll",
       note: "Rotate these keys before launch",
       steps: { box: "Box", arrow: "Arrow", text: "Text", pixelate: "Pixelate", adjust: "Adjust" },
       subs: [
@@ -91,7 +91,7 @@ const en = {
       kicker: "Shortcuts",
       title: "Everything has a key.",
       body: "Press a key on your keyboard or tap one here. Highlighted keys do something in Ledge.",
-      panel: "Interactive · press any key",
+      panel: "Press any key",
       prompt: "Press a key",
       none: "Not a Ledge shortcut. Try a highlighted key.",
       actions: {
@@ -118,7 +118,7 @@ const en = {
       title: "Your screenshots never leave your Mac.",
       body: "No account, no analytics and no network requests. Ledge reads the one folder you point it at and nothing else.",
       panel: "Your Mac",
-      caption: "YOUR MAC",
+      caption: "Your Mac",
       aria: "Screenshot cards drifting inside a closed circle that stands for your Mac",
       stats: [
         { v: "0", l: "Accounts" },
@@ -132,6 +132,11 @@ const en = {
     line2: "Then send it.",
     body: "Click any screenshot to open the editor. Annotate with arrows and text, pixelate passwords and keys, adjust the light, crop and rotate. Undo anything.",
     alt: "The Ledge editor with a tool rail, an annotated screenshot with pixelated keys, and style and adjust panels.",
+  },
+  film: {
+    hint: "Scroll to open",
+    aria: "A short film about a screenshot. A laptop opens, a screenshot is taken, and it flies up onto Ledge's shelf.",
+    captions: ["It starts on your Mac.", "You take a screenshot, like you always do.", "Ledge catches it the moment it's taken.", "And keeps it on a shelf, one reach away."],
   },
   video: { title: "See it in 40 seconds." },
   game: {

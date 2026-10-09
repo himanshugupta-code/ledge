@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { animate, createAnimatable, createTimeline, stagger, svg, utils, type Timeline } from "animejs";
 import { asset } from "../../lib/site";
 import { SPECTRUM, prefersReducedMotion, spring, watchVisibility } from "../../lib/motion";
-import { SplitWords } from "./SplitWords";
 
 type GameText = {
   kicker: string;
@@ -372,7 +371,7 @@ export function GameSection({ t }: { t: GameText }) {
               </span>
               {t.kicker}
             </p>
-            <SplitWords text={t.title} className="display m-game-title" />
+            <h2 className="display m-game-title">{t.title}</h2>
           </div>
           <p className="m-game-lede">{t.body}</p>
         </header>
