@@ -1,6 +1,7 @@
 import { JsonLd } from "./JsonLd";
 import { Reveal } from "./Reveal";
 import { SplitWords } from "./home/SplitWords";
+import { GameSection } from "./home/GameSection";
 import { Story } from "./home/Story";
 import { getDictionary } from "../dictionaries";
 import type { Locale } from "../lib/i18n";
@@ -76,6 +77,8 @@ export function HomePage({ lang }: { lang: Locale }) {
         keys={m.keys}
         privacy={m.privacy}
       />
+
+      <GameSection t={t.game} />
 
       <section className="band alt center" id="video">
         <div className="wrap">

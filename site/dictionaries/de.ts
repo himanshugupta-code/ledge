@@ -131,6 +131,19 @@ const de: Dict = {
     alt: "Der Ledge-Editor mit Werkzeugleiste, einem kommentierten Screenshot mit verpixelten Schlüsseln sowie Stil- und Anpassungsbereichen.",
   },
   video: { title: "In 40 Sekunden erklärt." },
+  game: {
+    kicker: "Gebaut mit Unity",
+    try: "Beweg den Zeiger über das Feld, um die Ablage zu testen.",
+    caught: "Gefangen",
+    close: "Spiel schließen",
+    ready: "Bereit",
+    title: "Mach mal Pause. Fang ein paar Screenshots.",
+    body: "Shelf Catch ist ein kleines Spiel, gebaut mit Unity. Schieb die Ablage, fang fallende Screenshots und weich dem Schreibtisch-Chaos aus. Drei Fehler und es ist vorbei.",
+    play: "Shelf Catch spielen",
+    hint: "Steuern mit Maus, Finger oder Pfeiltasten.",
+    loading: "Spiel wird geladen…",
+    full: "Im Vollbild öffnen",
+  },
   faq: {
     title: "Häufige Fragen.",
     items: [

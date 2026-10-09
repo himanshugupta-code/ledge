@@ -134,6 +134,19 @@ const en = {
     alt: "The Ledge editor with a tool rail, an annotated screenshot with pixelated keys, and style and adjust panels.",
   },
   video: { title: "See it in 40 seconds." },
+  game: {
+    kicker: "Built with Unity",
+    try: "Move your pointer over the board to try the ledge.",
+    caught: "Caught",
+    close: "Close game",
+    ready: "Ready",
+    title: "Take a break. Catch some shots.",
+    body: "Shelf Catch is a tiny game built in Unity. Slide the ledge to catch falling screenshots and dodge the desktop clutter. Three misses and you are out.",
+    play: "Play Shelf Catch",
+    hint: "Move with the mouse, a finger or the arrow keys.",
+    loading: "Loading the game…",
+    full: "Open full screen",
+  },
   faq: {
     title: "Questions, answered.",
     items: [
