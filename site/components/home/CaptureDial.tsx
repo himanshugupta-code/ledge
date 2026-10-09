@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { animate, createAnimatable, createScope, stagger, svg, utils } from "animejs";
-import { SPECTRUM, cssVar, finished, prefersReducedMotion, sleep, spring, watchVisibility } from "../../lib/motion";
+import { useEffect, useRef, type MutableRefObject } from "react";
+import { animate, createAnimatable, createTimeline, stagger, svg, utils } from "animejs";
+import { SPECTRUM, prefersReducedMotion } from "../../lib/motion";
 
 const COLS = 17;
 const ROWS = 11;
@@ -15,7 +15,8 @@ const SLOT_W = 44;
 const SLOT_H = 28;
 const SLOT_GAP = 10;
 const SLOTS = 4;
-const NS = "http://www.w3.org/2000/svg";
+
+export type DialApi = { setCapture: (p: number) => void; setActive: (i: number) => void };
 
 const slotX = (i: number) => -((SLOTS - 1) / 2) * (SLOT_W + SLOT_GAP) + i * (SLOT_W + SLOT_GAP);
 
@@ -45,45 +46,20 @@ const corners = [
   [-1, 1],
 ];
 
-function miniCard(parent: SVGGElement, color: string) {
-  const g = document.createElementNS(NS, "g");
-  const add = (attrs: Record<string, string | number>) => {
-    const r = document.createElementNS(NS, "rect");
-    for (const [k, v] of Object.entries(attrs)) r.setAttribute(k, String(v));
-    g.appendChild(r);
-  };
-  add({ x: -SLOT_W / 2, y: -SLOT_H, width: SLOT_W, height: SLOT_H, rx: 4, fill: "#eef1fb" });
-  add({ x: -SLOT_W / 2, y: -SLOT_H, width: 10, height: SLOT_H, fill: color, opacity: 0.9 });
-  add({ x: -7, y: -SLOT_H + 6, width: 22, height: 3, rx: 1.5, fill: "#9aa3c4" });
-  add({ x: -7, y: -SLOT_H + 13, width: 16, height: 3, rx: 1.5, fill: "#c4cae0" });
-  parent.appendChild(g);
-  return g;
-}
+const cards = [
+  { slot: 0, color: SPECTRUM[5], fresh: true },
+  { slot: 1, color: SPECTRUM[3], fresh: false },
+  { slot: 2, color: SPECTRUM[4], fresh: false },
+  { slot: 3, color: SPECTRUM[0], fresh: false },
+];
 
-export function CaptureDial({ label, countLabel }: { label: string; countLabel: string }) {
+export function CaptureDial({ label, countLabel, apiRef }: { label: string; countLabel: string; apiRef: MutableRefObject<DialApi | null> }) {
   const root = useRef<HTMLDivElement>(null);
-  const shelf = useRef<SVGGElement>(null);
-  const count = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const el = root.current;
-    const shelfG = shelf.current;
-    const countEl = count.current;
-    if (!el || !shelfG || !countEl) return;
+    if (!el) return;
     const reduce = prefersReducedMotion();
-    let alive = true;
-    let visible = true;
-    let captures = 0;
-    const cards: SVGGElement[] = [];
-
-    for (let i = 0; i < 3; i++) {
-      const g = miniCard(shelfG, SPECTRUM[(i + 3) % 6]);
-      utils.set(g, { x: slotX(i + 1), y: SHELF_Y - 2 });
-      cards.push(g);
-    }
-    captures = 3;
-    countEl.textContent = String(captures);
-
     const svgEl = el.querySelector<SVGSVGElement>("svg")!;
     const ring = el.querySelector<SVGGElement>(".m-ring")!;
     const segs = [...el.querySelectorAll<SVGPathElement>(".m-seg")];
@@ -94,20 +70,50 @@ export function CaptureDial({ label, countLabel }: { label: string; countLabel: 
     const sizeTag = el.querySelector<SVGTextElement>(".m-size")!;
     const flash = el.querySelector<SVGCircleElement>(".m-flash")!;
     const shelfLine = el.querySelector<SVGLineElement>(".m-shelf")!;
-    const orbitA = el.querySelector<SVGCircleElement>(".m-orbit-a")!;
-    const orbitB = el.querySelector<SVGPathElement>(".m-orbit-b")!;
-    const orbitC = el.querySelector<SVGPathElement>(".m-orbit-c")!;
+    const fresh = el.querySelector<SVGGElement>(".m-mini.fresh .m-mini-body")!;
+    const countEl = el.querySelector<HTMLElement>(".m-dial-count b")!;
+    const orbits = [".m-orbit-a", ".m-orbit-b", ".m-orbit-c"].map((s) => el.querySelector<SVGElement>(s)!);
 
-    const scope = createScope({ root: el }).add(() => {
-      if (reduce) return;
-      animate(svg.createDrawable(segs), { draw: ["0 0", "0 1"], duration: 1400, delay: stagger(140, { start: 200 }), ease: "inOutQuad" });
-      animate(ring, { rotate: 360, duration: 90000, loop: true, ease: "linear" });
-      animate(orbitA, { rotate: -360, duration: 60000, loop: true, ease: "linear" });
-      animate(orbitB, { rotate: 360, duration: 14000, loop: true, ease: "inOutSine" });
-      animate(orbitC, { rotate: -360, duration: 9000, loop: true, ease: "inOutQuad" });
-      animate(tickEls, { opacity: [0.25, 1], duration: 700, delay: stagger(16), loop: true, alternate: true, ease: "inOutSine" });
-      animate(dotEls, { scale: [0, 1], opacity: [0, 1], duration: 700, delay: stagger(18, { grid: [COLS, ROWS], from: "center", start: 500 }), ease: "outBack" });
+    const ambient = reduce
+      ? []
+      : [
+          animate(svg.createDrawable(segs), { draw: ["0 0", "0 1"], duration: 1400, delay: stagger(140, { start: 200 }), ease: "inOutQuad" }),
+          animate(ring, { rotate: 360, duration: 90000, loop: true, ease: "linear" }),
+          animate(orbits[0], { rotate: -360, duration: 60000, loop: true, ease: "linear" }),
+          animate(orbits[1], { rotate: 360, duration: 14000, loop: true, ease: "inOutSine" }),
+          animate(orbits[2], { rotate: -360, duration: 9000, loop: true, ease: "inOutQuad" }),
+          animate(tickEls, { opacity: [0.25, 1], duration: 700, delay: stagger(16), loop: true, alternate: true, ease: "inOutSine" }),
+        ];
+
+    const size = { w: 0, h: 0 };
+    const tally = { n: 3 };
+    utils.set(brackets, { opacity: 0 });
+    utils.set(fresh, { scale: 0, opacity: 0 });
+    const capture = createTimeline({ autoplay: false, defaults: { ease: "inOutQuad" } })
+      .add(dotEls, { scale: [{ to: 1.9 }, { to: 1 }], fill: [{ to: SPECTRUM[5] }, { to: "#eef1fb" }], duration: 200, delay: stagger(12, { grid: [COLS, ROWS], from: "center" }) }, 0)
+      .add(sizeTag, { opacity: [0, 1], duration: 40 }, 300)
+      .add(size, { w: [0, 1440], h: [0, 900], duration: 140, modifier: utils.round(0), onUpdate: () => { sizeTag.textContent = `${size.w} × ${size.h}`; } }, 300)
+      .add(flash, { opacity: [0, 0.85, 0], duration: 90 }, 470)
+      .add(sizeTag, { opacity: 0, duration: 50 }, 500)
+      .add(field, { x: [0, slotX(0)], y: [0, SHELF_Y - SLOT_H / 2 - 2 - FIELD_Y], scale: [1, SLOT_W / (BW * 2)], duration: 260, ease: "inOutExpo" }, 540)
+      .add(field, { opacity: [1, 0], duration: 40 }, 790)
+      .add(fresh, { scale: [0, 1], opacity: [0, 1], duration: 160, ease: "outBack" }, 800)
+      .add(shelfLine, { strokeWidth: [3, 6, 3], duration: 160 }, 800)
+      .add(tally, { n: [3, 4], duration: 10, modifier: utils.round(0), onUpdate: () => { countEl.textContent = String(tally.n); } }, 830)
+      .add({}, { duration: 170 }, 830);
+    brackets.forEach((b, j) => {
+      capture.add(b, { x: [Number(b.dataset.sx) * 46, 0], y: [Number(b.dataset.sy) * 30, 0], opacity: [0, 1], duration: 160, ease: "outExpo" }, 240 + j * 10);
+      capture.add(b, { opacity: 0, duration: 50 }, 500);
     });
+
+    apiRef.current = {
+      setCapture: (p) => capture.seek(Math.min(1, Math.max(0, p)) * capture.duration),
+      setActive: (i) => {
+        segs.forEach((seg, j) => {
+          animate(seg, { opacity: i < 0 || i === j ? 1 : 0.18, strokeWidth: i === j ? 9 : 5, duration: 400, ease: "outQuad" });
+        });
+      },
+    };
 
     const tilt = reduce ? null : createAnimatable(svgEl, { rotateX: 900, rotateY: 900, ease: "out(3)" });
     const onMove = (e: PointerEvent) => {
@@ -121,83 +127,17 @@ export function CaptureDial({ label, countLabel }: { label: string; countLabel: 
     };
     el.addEventListener("pointermove", onMove);
     el.addEventListener("pointerleave", onLeave);
-    const unwatch = watchVisibility(el, (v) => (visible = v), 0.1);
-
-    async function loop() {
-      await sleep(2000);
-      let k = 0;
-      while (alive) {
-        if (!visible || document.hidden) {
-          await sleep(400);
-          continue;
-        }
-        const dotColor = cssVar("--m-dot") || "#5d6072";
-        const color = SPECTRUM[k % 6];
-        animate(dotEls, {
-          scale: [{ to: 1.9, duration: 260 }, { to: 1, duration: 520 }],
-          fill: [{ to: color, duration: 200 }, { to: dotColor, duration: 900 }],
-          delay: stagger(26, { grid: [COLS, ROWS], from: (k * 37) % dotEls.length }),
-          ease: "inOutQuad",
-        });
-        await sleep(700);
-        if (!alive) return;
-        brackets.forEach((b) => utils.set(b, { x: Number(b.dataset.sx) * 46, y: Number(b.dataset.sy) * 30, opacity: 0 }));
-        utils.set(sizeTag, { opacity: 0 });
-        await finished(animate(brackets, { x: 0, y: 0, opacity: 1, duration: 650, delay: stagger(40), ease: "outExpo" }));
-        const size = { w: 0, h: 0 };
-        animate(sizeTag, { opacity: 1, duration: 200 });
-        await finished(
-          animate(size, {
-            w: 1440,
-            h: 900,
-            duration: 420,
-            ease: "outQuad",
-            modifier: utils.round(0),
-            onUpdate: () => {
-              sizeTag.textContent = `${size.w} × ${size.h}`;
-            },
-          }),
-        );
-        await sleep(160);
-        if (!alive) return;
-        animate(flash, { opacity: [0.85, 0], duration: 520, ease: "outQuad" });
-        utils.set(dotEls, { fill: "#eef1fb" });
-        animate([...brackets, sizeTag], { opacity: 0, duration: 220 });
-        if (cards.length >= SLOTS) {
-          const out = cards.pop()!;
-          animate(out, { y: SHELF_Y + 60, opacity: 0, rotate: 18, duration: 600, ease: "inQuad", onComplete: () => out.remove() });
-        }
-        cards.forEach((g, i) => animate(g, { x: slotX(i + 1), duration: 900, delay: 120 + i * 40, ease: spring(170, 13) }));
-        await finished(animate(field, { x: slotX(0), y: SHELF_Y - SLOT_H / 2 - 2 - FIELD_Y, scale: SLOT_W / (BW * 2), duration: 620, ease: "inOutExpo" }));
-        if (!alive) return;
-        const card = miniCard(shelfG!, color);
-        utils.set(card, { x: slotX(0), y: SHELF_Y - 2, scale: 1.15 });
-        animate(card, { scale: 1, duration: 700, ease: spring(260, 10) });
-        animate(shelfLine, { strokeWidth: [6, 3], duration: 500, ease: "outQuad" });
-        cards.unshift(card);
-        captures += 1;
-        countEl!.textContent = String(captures);
-        utils.set(field, { x: 0, y: 0, scale: 1, opacity: 0 });
-        utils.set(dotEls, { fill: dotColor });
-        animate(field, { opacity: 1, duration: 300 });
-        animate(dotEls, { scale: [0, 1], duration: 600, delay: stagger(14, { grid: [COLS, ROWS], from: "center" }), ease: "outBack" });
-        k += 1;
-        await sleep(1700);
-      }
-    }
-    if (!reduce) loop();
 
     return () => {
-      alive = false;
-      unwatch();
+      apiRef.current = null;
       el.removeEventListener("pointermove", onMove);
       el.removeEventListener("pointerleave", onLeave);
-      scope.revert();
+      ambient.forEach((a) => a.revert());
+      capture.revert();
       tilt?.revert();
-      utils.remove([...dotEls, ...brackets, sizeTag, flash, field, shelfLine, ...cards]);
-      cards.forEach((c) => c.remove());
+      utils.remove(segs);
     };
-  }, []);
+  }, [apiRef]);
 
   return (
     <div className="m-dial" ref={root}>
@@ -216,39 +156,45 @@ export function CaptureDial({ label, countLabel }: { label: string; countLabel: 
             <path key={c} className="m-seg" d={arc(292, i * 60 + 2, i * 60 + 58)} stroke={c} strokeWidth={5} fill="none" strokeLinecap="round" filter="url(#m-glow)" />
           ))}
         </g>
-        <g>
+        <g className="m-ticks">
           {ticks.map((t, i) => (
             <line key={i} className={`m-tick${t.long ? " long" : ""}`} x1={t.x1.toFixed(2)} y1={t.y1.toFixed(2)} x2={t.x2.toFixed(2)} y2={t.y2.toFixed(2)} strokeWidth={t.long ? 1.6 : 1} />
           ))}
         </g>
-        <circle className="m-orbit-a" r={246} fill="none" strokeWidth={1} strokeDasharray="2 7" />
-        <path className="m-orbit-b" d={arc(232, 200, 320)} fill="none" strokeWidth={14} strokeLinecap="round" />
-        <path className="m-orbit-c" d={arc(232, 20, 80)} fill="none" stroke="#ff9a3c" strokeWidth={2} opacity={0.6} />
-        <circle className="m-disc" r={218} strokeWidth={1} />
-        <g className="m-field" style={{ transformOrigin: `0px ${FIELD_Y}px` }}>
-          {dots.map((d, i) => (
-            <circle key={i} className="m-dot" cx={d.cx} cy={d.cy} r={2.4} />
+        <g className="m-inner">
+          <circle className="m-orbit-a" r={246} fill="none" strokeWidth={1} strokeDasharray="2 7" />
+          <path className="m-orbit-b" d={arc(232, 200, 320)} fill="none" strokeWidth={14} strokeLinecap="round" />
+          <path className="m-orbit-c" d={arc(232, 20, 80)} fill="none" stroke="#ff9a3c" strokeWidth={2} opacity={0.6} />
+          <circle className="m-disc" r={218} strokeWidth={1} />
+          <g className="m-field" style={{ transformOrigin: `0px ${FIELD_Y}px` }}>
+            {dots.map((d, i) => (
+              <circle key={i} className="m-dot" cx={d.cx} cy={d.cy} r={2.4} />
+            ))}
+          </g>
+          {corners.map(([sx, sy]) => (
+            <g key={`${sx}${sy}`} className="m-bracket" data-sx={sx} data-sy={sy}>
+              <path d={`M${sx * BW} ${FIELD_Y + sy * (BH - 18)} L${sx * BW} ${FIELD_Y + sy * BH} L${sx * (BW - 18)} ${FIELD_Y + sy * BH}`} fill="none" strokeWidth={2.5} strokeLinecap="round" />
+            </g>
+          ))}
+          <text className="m-size" x={BW} y={FIELD_Y + BH + 22} textAnchor="end" opacity={0}>
+            0 × 0
+          </text>
+          <circle className="m-flash" r={218} fill="#ffffff" opacity={0} />
+          <line className="m-shelf" x1={-128} y1={SHELF_Y} x2={128} y2={SHELF_Y} strokeWidth={3} strokeLinecap="round" filter="url(#m-glow)" />
+          {cards.map((c) => (
+            <g key={c.slot} className={`m-mini${c.fresh ? " fresh" : ""}`} transform={`translate(${slotX(c.slot)} ${SHELF_Y - 2})`}>
+              <g className="m-mini-body">
+                <rect x={-SLOT_W / 2} y={-SLOT_H} width={SLOT_W} height={SLOT_H} rx={4} fill="#eef1fb" />
+                <rect x={-SLOT_W / 2} y={-SLOT_H} width={10} height={SLOT_H} fill={c.color} opacity={0.9} />
+                <rect x={-7} y={-SLOT_H + 6} width={22} height={3} rx={1.5} fill="#9aa3c4" />
+                <rect x={-7} y={-SLOT_H + 13} width={16} height={3} rx={1.5} fill="#c4cae0" />
+              </g>
+            </g>
           ))}
         </g>
-        {corners.map(([sx, sy]) => (
-          <g key={`${sx}${sy}`} className="m-bracket" data-sx={sx} data-sy={sy} opacity={0}>
-            <path
-              d={`M${sx * BW} ${FIELD_Y + sy * (BH - 18)} L${sx * BW} ${FIELD_Y + sy * BH} L${sx * (BW - 18)} ${FIELD_Y + sy * BH}`}
-              fill="none"
-              strokeWidth={2.5}
-              strokeLinecap="round"
-            />
-          </g>
-        ))}
-        <text className="m-size" x={BW} y={FIELD_Y + BH + 22} textAnchor="end" opacity={0}>
-          1440 × 900
-        </text>
-        <circle className="m-flash" r={218} fill="#ffffff" opacity={0} />
-        <line className="m-shelf" x1={-128} y1={SHELF_Y} x2={128} y2={SHELF_Y} strokeWidth={3} strokeLinecap="round" filter="url(#m-glow)" />
-        <g ref={shelf} />
       </svg>
       <p className="m-dial-count">
-        {countLabel} <b ref={count}>0</b>
+        {countLabel} <b>3</b>
       </p>
     </div>
   );

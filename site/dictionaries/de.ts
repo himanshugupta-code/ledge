@@ -30,7 +30,7 @@ const de: Dict = {
     note: "Kostenlos. macOS auf Apple Silicon. Mac-App-Store-Version in Prüfung.",
   },
   motion: {
-    dial: { label: "Eine animierte Aufnahme: Ein Punktraster wird eingerahmt, der Bildschirm blitzt und die Aufnahme landet als Karte auf dem Regal.", count: "Aufnahmen auf dem Regal" },
+    dial: { label: "Eine animierte Aufnahme: Ein Punktraster wird eingerahmt, der Bildschirm blitzt und die Aufnahme landet als Karte auf dem Regal.", count: "Aufnahmen auf dem Regal", hint: "Scrolle, um einen Screenshot zu machen" },
     x64: "Intel-Mac",
     shelf: {
       kicker: "Das Regal",

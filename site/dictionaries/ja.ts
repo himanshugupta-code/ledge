@@ -30,7 +30,7 @@ const ja: Dict = {
     note: "無料。Apple silicon搭載のmacOS対応。Mac App Store版は審査中です。",
   },
   motion: {
-    dial: { label: "キャプチャのアニメーション：ドットのグリッドが枠で囲まれ、画面が光り、キャプチャがカードとして棚に収まります。", count: "棚にあるキャプチャ" },
+    dial: { label: "キャプチャのアニメーション：ドットのグリッドが枠で囲まれ、画面が光り、キャプチャがカードとして棚に収まります。", count: "棚にあるキャプチャ", hint: "スクロールしてスクリーンショットを撮る" },
     x64: "Intel搭載Mac",
     shelf: {
       kicker: "棚",

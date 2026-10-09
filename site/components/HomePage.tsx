@@ -1,46 +1,10 @@
-import type { ReactNode } from "react";
 import { JsonLd } from "./JsonLd";
 import { Reveal } from "./Reveal";
-import { CaptureDial } from "./home/CaptureDial";
-import { DragDemo } from "./home/DragDemo";
-import { EditorDemo } from "./home/EditorDemo";
-import { KeysDemo } from "./home/KeysDemo";
-import { RevealDemo, ShelfDemo } from "./home/ShelfDemos";
 import { SplitWords } from "./home/SplitWords";
-import { VaultDemo } from "./home/VaultDemo";
+import { Story } from "./home/Story";
 import { getDictionary } from "../dictionaries";
 import type { Locale } from "../lib/i18n";
 import { abs, asset, AUTHOR, DMG_ARM, DMG_X64, RELEASE } from "../lib/site";
-
-type Sub = { b: string; s: string };
-
-function Feature({ id, color, kicker, title, body, subs, flip = false, children }: { id: string; color: string; kicker: string; title: string; body: string; subs: Sub[]; flip?: boolean; children: ReactNode }) {
-  return (
-    <section className={`m-feature${flip ? " flip" : ""}`} id={id}>
-      <div className="wrap m-feature-grid">
-        <div className="m-copy">
-          <p className="m-kicker" style={{ ["--c" as string]: color }}>
-            <i />
-            {kicker}
-          </p>
-          <SplitWords text={title} className="m-h2" />
-          <p className="m-lead">{body}</p>
-          {subs.length > 0 && (
-            <ul className="m-subs">
-              {subs.map((s) => (
-                <li key={s.b}>
-                  <b>{s.b}</b>
-                  <span>{s.s}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-        {children}
-      </div>
-    </section>
-  );
-}
 
 export function HomePage({ lang }: { lang: Locale }) {
   const t = getDictionary(lang);
@@ -93,55 +57,25 @@ export function HomePage({ lang }: { lang: Locale }) {
   return (
     <>
       <JsonLd data={graph} />
-      <section className="hero m-hero">
-        <div className="wrap m-hero-grid">
-          <div className="m-hero-copy">
-            <p className="eyebrow">{t.hero.eyebrow}</p>
-            <SplitWords as="h1" text={t.hero.title} onLoad />
-            <p className="sub">{t.hero.sub}</p>
-            <div className="cta">
-              <a className="btn" href={DMG_ARM}>{t.hero.cta}</a>
-              <a className="btn ghost" href="#video">{t.hero.film}</a>
-            </div>
-            <p className="note">{t.hero.note}</p>
-          </div>
-          <CaptureDial label={m.dial.label} countLabel={m.dial.count} />
-        </div>
-      </section>
-
-      <Feature id="shelf" color="#ff5a5f" {...m.shelf}>
-        <ShelfDemo label={m.shelf.panel} />
-      </Feature>
-
-      <Feature id="reveal" color="#ff9a3c" flip {...m.reveal}>
-        <RevealDemo label={m.reveal.panel} />
-      </Feature>
-
-      <Feature id="drag" color="#ffd43b" {...m.drag}>
-        <DragDemo label={m.drag.panel} hint={m.drag.hint} shared={m.drag.shared} cardLabel={m.drag.card} apps={m.drag.apps} />
-      </Feature>
-
-      <Feature id="editor" color="#3ddc84" flip kicker={m.editor.kicker} title={`${t.editor.line1} ${t.editor.line2}`} body={t.editor.body} subs={m.editor.subs}>
-        <EditorDemo label={m.editor.panel} steps={m.editor.steps} note={m.editor.note} />
-      </Feature>
-
-      <Feature id="keys" color="#2cd4e8" {...m.keys} subs={[]}>
-        <KeysDemo label={m.keys.panel} prompt={m.keys.prompt} none={m.keys.none} actions={m.keys.actions} />
-      </Feature>
-
-      <Feature id="private" color="#5b7cff" flip {...m.privacy} subs={[]}>
-        <div className="m-private">
-          <VaultDemo label={m.privacy.panel} caption={m.privacy.caption} aria={m.privacy.aria} />
-          <div className="m-stats">
-            {m.privacy.stats.map((s) => (
-              <div key={s.l} className="m-stat">
-                <b>{s.v}</b>
-                <span>{s.l}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Feature>
+      <Story
+        hero={{ ...t.hero, href: DMG_ARM }}
+        dial={m.dial}
+        features={[
+          { id: "shelf", color: "#ff5a5f", ...m.shelf },
+          { id: "reveal", color: "#ff9a3c", ...m.reveal },
+          { id: "drag", color: "#ffd43b", ...m.drag },
+          { id: "editor", color: "#3ddc84", kicker: m.editor.kicker, title: `${t.editor.line1} ${t.editor.line2}`, body: t.editor.body, subs: m.editor.subs },
+          { id: "keys", color: "#2cd4e8", ...m.keys, subs: [] },
+          { id: "private", color: "#5b7cff", ...m.privacy, subs: [] },
+        ]}
+        stats={m.privacy.stats}
+        shelf={m.shelf}
+        reveal={m.reveal}
+        drag={m.drag}
+        editor={m.editor}
+        keys={m.keys}
+        privacy={m.privacy}
+      />
 
       <section className="band alt center" id="video">
         <div className="wrap">

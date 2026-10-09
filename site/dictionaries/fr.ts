@@ -30,7 +30,7 @@ const fr: Dict = {
     note: "Gratuit. macOS sur Apple silicon. Version Mac App Store en cours de validation.",
   },
   motion: {
-    dial: { label: "Une capture animée : une grille de points est cadrée, l'écran flashe et la capture se pose sur l'étagère sous forme de carte.", count: "Captures sur l'étagère" },
+    dial: { label: "Une capture animée : une grille de points est cadrée, l'écran flashe et la capture se pose sur l'étagère sous forme de carte.", count: "Captures sur l'étagère", hint: "Faites défiler pour prendre une capture" },
     x64: "Mac Intel",
     shelf: {
       kicker: "L'étagère",

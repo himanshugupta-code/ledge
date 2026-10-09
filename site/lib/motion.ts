@@ -22,3 +22,9 @@ export const finished = (animation: { then: (callback: () => void) => unknown })
   new Promise<void>((resolve) => {
     animation.then(() => resolve());
   });
+
+export const EDITOR_PROGRESS = "ledge:editor-progress";
+
+export const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+
+export const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);

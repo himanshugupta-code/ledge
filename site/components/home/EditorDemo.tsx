@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { createTimeline, stagger, svg, utils } from "animejs";
-import { prefersReducedMotion } from "../../lib/motion";
+import { EDITOR_PROGRESS, prefersReducedMotion } from "../../lib/motion";
 
 type Steps = { box: string; arrow: string; text: string; pixelate: string; adjust: string };
 
@@ -76,31 +76,16 @@ export function EditorDemo({ label, steps, note }: { label: string; steps: Steps
         },
       }, 4500);
 
-    let frame = 0;
-    const sync = () => {
-      frame = 0;
-      const r = el.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const p = Math.min(1, Math.max(0, (vh * 0.95 - r.top) / (vh * 0.55 + r.height * 0.35)));
+    const seek = (p: number) => {
       tl.seek(p * tl.duration);
       scrub.style.width = `${p * 100}%`;
     };
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(sync);
-    };
-    if (prefersReducedMotion()) {
-      tl.seek(tl.duration);
-      scrub.style.width = "100%";
-    } else {
-      window.addEventListener("scroll", onScroll, { passive: true });
-      window.addEventListener("resize", onScroll);
-      sync();
-    }
+    const onProgress = (e: Event) => seek((e as CustomEvent<number>).detail);
+    if (prefersReducedMotion()) seek(1);
+    else window.addEventListener(EDITOR_PROGRESS, onProgress);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      cancelAnimationFrame(frame);
+      window.removeEventListener(EDITOR_PROGRESS, onProgress);
       tl.revert();
       blocks.forEach((b) => b.remove());
       text.textContent = "";

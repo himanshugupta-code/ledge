@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { animate, createTimeline, stagger, utils } from "animejs";
-import { prefersReducedMotion, sleep, spring, watchVisibility } from "../../lib/motion";
+import { prefersReducedMotion, sleep, spring } from "../../lib/motion";
+import { useLatest } from "../../lib/useLatest";
 
 const THUMBS = ["m-th-dash", "m-th-code", "m-th-photo", "m-th-chat", "m-th-keys", "m-th-doc"];
 
@@ -32,9 +33,10 @@ function MenuBar({ app, time }: { app: string; time: string }) {
   );
 }
 
-export function ShelfDemo({ label }: { label: string }) {
+export function ShelfDemo({ label, active }: { label: string; active: boolean }) {
   const panel = useRef<HTMLDivElement>(null);
   const rowRef = useRef<HTMLDivElement>(null);
+  const activeRef = useLatest(active);
 
   useEffect(() => {
     const row = rowRef.current;
@@ -42,20 +44,17 @@ export function ShelfDemo({ label }: { label: string }) {
     if (!row || !el) return;
     const reduce = prefersReducedMotion();
     let alive = true;
-    let visible = false;
     let next = 5;
     const cards = Array.from({ length: 5 }, (_, i) => addCard(row, i));
     const layout = () => cards.forEach((c, i) => (c.style.left = `${cardLeft(row, i)}px`));
     layout();
     const ro = new ResizeObserver(layout);
     ro.observe(row);
-    const unwatch = watchVisibility(el, (v) => (visible = v));
-
     async function loop() {
       while (alive) {
         await sleep(1600);
         if (!alive) return;
-        if (!visible || document.hidden) continue;
+        if (!activeRef.current || document.hidden) continue;
         const c = addCard(row!, next++, true);
         c.style.left = `${cardLeft(row!, 0)}px`;
         cards.unshift(c);
@@ -75,11 +74,10 @@ export function ShelfDemo({ label }: { label: string }) {
     return () => {
       alive = false;
       ro.disconnect();
-      unwatch();
       utils.remove(cards);
       cards.forEach((c) => c.remove());
     };
-  }, []);
+  }, [activeRef]);
 
   return (
     <div className="m-panel" ref={panel}>
@@ -97,8 +95,9 @@ export function ShelfDemo({ label }: { label: string }) {
   );
 }
 
-export function RevealDemo({ label }: { label: string }) {
+export function RevealDemo({ label, active }: { label: string; active: boolean }) {
   const panel = useRef<HTMLDivElement>(null);
+  const timeline = useRef<ReturnType<typeof createTimeline> | null>(null);
 
   useEffect(() => {
     const el = panel.current;
@@ -126,15 +125,20 @@ export function RevealDemo({ label }: { label: string }) {
       .add(cursor, { left: "60%", top: "78%", duration: 900, ease: "inOutCubic" })
       .add(strip, { y: "-110%", duration: 600, ease: "inQuad" }, "-=350")
       .add({}, { duration: 900 });
-    const unwatch = watchVisibility(el, (v) => (v && !reduce ? tl.play() : tl.pause()));
+    timeline.current = reduce ? null : tl;
 
     return () => {
-      unwatch();
+      timeline.current = null;
       ro.disconnect();
       tl.revert();
       cards.forEach((c) => c.remove());
     };
   }, []);
+
+  useEffect(() => {
+    if (active) timeline.current?.play();
+    else timeline.current?.pause();
+  }, [active]);
 
   return (
     <div className="m-panel" ref={panel}>

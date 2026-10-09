@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { animate, utils } from "animejs";
-import { prefersReducedMotion, spring, watchVisibility } from "../../lib/motion";
+import { prefersReducedMotion, spring } from "../../lib/motion";
 
 export type DragApp = { name: string; sub: string; to: string };
 
@@ -12,8 +12,9 @@ const APP_STYLE = [
   { color: "#ff9a3c", glyph: "▤" },
 ];
 
-export function DragDemo({ label, hint, shared, cardLabel, apps }: { label: string; hint: string; shared: string; cardLabel: string; apps: DragApp[] }) {
+export function DragDemo({ label, hint, shared, cardLabel, apps, active }: { label: string; hint: string; shared: string; cardLabel: string; apps: DragApp[]; active: boolean }) {
   const panel = useRef<HTMLDivElement>(null);
+  const nudged = useRef(false);
 
   useEffect(() => {
     const el = panel.current;
@@ -21,7 +22,6 @@ export function DragDemo({ label, hint, shared, cardLabel, apps }: { label: stri
     const card = el.querySelector<HTMLDivElement>(".m-drag-card")!;
     const toast = el.querySelector<HTMLDivElement>(".m-toast")!;
     const targets = [...el.querySelectorAll<HTMLDivElement>(".m-app")];
-    const reduce = prefersReducedMotion();
     let drag: { x0: number; y0: number; lx: number; vx: number } | null = null;
 
     const hit = (x: number, y: number) =>
@@ -65,15 +65,7 @@ export function DragDemo({ label, hint, shared, cardLabel, apps }: { label: stri
     card.addEventListener("pointerup", up);
     card.addEventListener("pointercancel", up);
 
-    let nudged = false;
-    const unwatch = watchVisibility(el, (v) => {
-      if (!v || nudged || reduce) return;
-      nudged = true;
-      animate(card, { x: [0, 26, 0], rotate: [0, 6, 0], duration: 1200, delay: 500, ease: "inOutSine" });
-    });
-
     return () => {
-      unwatch();
       card.removeEventListener("pointerdown", down);
       card.removeEventListener("pointermove", move);
       card.removeEventListener("pointerup", up);
@@ -81,6 +73,13 @@ export function DragDemo({ label, hint, shared, cardLabel, apps }: { label: stri
       utils.remove([card, toast, ...targets]);
     };
   }, [shared]);
+
+  useEffect(() => {
+    const card = panel.current?.querySelector<HTMLDivElement>(".m-drag-card");
+    if (!active || nudged.current || !card || prefersReducedMotion()) return;
+    nudged.current = true;
+    animate(card, { x: [0, 26, 0], rotate: [0, 6, 0], duration: 1200, delay: 500, ease: "inOutSine" });
+  }, [active]);
 
   return (
     <div className="m-panel" ref={panel}>

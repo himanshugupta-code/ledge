@@ -30,7 +30,7 @@ const es: Dict = {
     note: "Gratis. macOS en Apple silicon. Versión de la Mac App Store en revisión.",
   },
   motion: {
-    dial: { label: "Una captura animada: una cuadrícula de puntos se encuadra, la pantalla destella y la captura aterriza en el estante como una tarjeta.", count: "Capturas en el estante" },
+    dial: { label: "Una captura animada: una cuadrícula de puntos se encuadra, la pantalla destella y la captura aterriza en el estante como una tarjeta.", count: "Capturas en el estante", hint: "Desplázate para hacer una captura" },
     x64: "Mac con Intel",
     shelf: {
       kicker: "El estante",

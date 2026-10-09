@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { animate, stagger, utils } from "animejs";
-import { cssVar, prefersReducedMotion, sleep, watchVisibility } from "../../lib/motion";
+import { cssVar, prefersReducedMotion, sleep } from "../../lib/motion";
+import { useLatest } from "../../lib/useLatest";
 
 export type KeyActions = Record<"esc" | "tab" | "enter" | "del" | "c" | "l" | "v" | "a" | "r" | "o" | "p" | "h" | "t" | "x" | "z" | "s", string>;
 
@@ -36,7 +37,8 @@ const COMBOS: Record<string, [string[], keyof KeyActions]> = {
 
 const KEY_NAMES: Record<string, string> = { Escape: "Esc", Tab: "Tab", Enter: "↵", Delete: "Del", Backspace: "⌫", CapsLock: "⇪", Shift: "⇧" };
 
-export function KeysDemo({ label, prompt, none, actions }: { label: string; prompt: string; none: string; actions: KeyActions }) {
+export function KeysDemo({ label, prompt, none, actions, active }: { label: string; prompt: string; none: string; actions: KeyActions; active: boolean }) {
+  const activeRef = useLatest(active);
   const panel = useRef<HTMLDivElement>(null);
   const readout = useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState<{ combo: string[]; text: string } | null>(null);
@@ -69,11 +71,9 @@ export function KeysDemo({ label, prompt, none, actions }: { label: string; prom
   useEffect(() => {
     const el = panel.current;
     if (!el) return;
-    let visible = false;
     let alive = true;
-    const unwatch = watchVisibility(el, (v) => (visible = v), 0.3);
     const onKey = (e: KeyboardEvent) => {
-      if (!visible || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (!activeRef.current || e.metaKey || e.ctrlKey || e.altKey) return;
       const target = e.target as HTMLElement | null;
       if (target?.closest("input, textarea, select")) return;
       const key = KEY_NAMES[e.key] ?? e.key.toUpperCase();
@@ -89,18 +89,17 @@ export function KeysDemo({ label, prompt, none, actions }: { label: string; prom
       while (alive && !prefersReducedMotion()) {
         await sleep(2400);
         if (!alive || touched.current) return;
-        if (!visible || document.hidden) continue;
+        if (!activeRef.current || document.hidden) continue;
         press(tour[i++ % tour.length], false);
       }
     })();
 
     return () => {
       alive = false;
-      unwatch();
       window.removeEventListener("keydown", onKey);
       utils.remove(el.querySelectorAll(".m-k"));
     };
-  }, [press]);
+  }, [press, activeRef]);
 
   return (
     <div className="m-panel" ref={panel}>

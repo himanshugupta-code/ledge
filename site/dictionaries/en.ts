@@ -32,6 +32,7 @@ const en = {
     dial: {
       label: "An animated capture: a grid of dots is framed, the screen flashes, and the capture lands on the shelf as a card.",
       count: "Captures on the ledge",
+      hint: "Scroll to take a screenshot",
     },
     x64: "Intel Mac",
     shelf: {

@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { animate, utils } from "animejs";
-import { SPECTRUM, prefersReducedMotion, watchVisibility } from "../../lib/motion";
+import { SPECTRUM, prefersReducedMotion } from "../../lib/motion";
+import { useLatest } from "../../lib/useLatest";
 
 const probes = Array.from({ length: 8 }, (_, i) => {
   const a = (i / 8) * Math.PI * 2;
@@ -20,8 +21,9 @@ const motes = Array.from({ length: 26 }, (_, i) => {
   return { x: r * Math.cos(a), y: r * Math.sin(a), rot: seeded(i + 7) * 40 - 20, color: SPECTRUM[i % 6] };
 });
 
-export function VaultDemo({ label, caption, aria }: { label: string; caption: string; aria: string }) {
+export function VaultDemo({ label, caption, aria, active }: { label: string; caption: string; aria: string; active: boolean }) {
   const panel = useRef<HTMLDivElement>(null);
+  const activeRef = useLatest(active);
 
   useEffect(() => {
     const el = panel.current;
@@ -29,12 +31,10 @@ export function VaultDemo({ label, caption, aria }: { label: string; caption: st
     const moteEls = [...el.querySelectorAll<SVGGElement>(".m-mote")];
     const lines = [...el.querySelectorAll<SVGLineElement>(".m-probe")];
     let alive = true;
-    let visible = false;
     const timers: number[] = [];
-    const unwatch = watchVisibility(el, (v) => (visible = v));
     const drift = (g: SVGGElement) => {
       if (!alive) return;
-      if (!visible) {
+      if (!activeRef.current) {
         timers.push(window.setTimeout(() => drift(g), 600));
         return;
       }
@@ -47,12 +47,11 @@ export function VaultDemo({ label, caption, aria }: { label: string; caption: st
 
     return () => {
       alive = false;
-      unwatch();
       timers.forEach(clearTimeout);
       dash.revert();
       utils.remove(moteEls);
     };
-  }, []);
+  }, [activeRef]);
 
   return (
     <div className="m-panel" ref={panel}>
