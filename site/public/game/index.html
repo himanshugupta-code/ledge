@@ -9,6 +9,7 @@ html, body { margin: 0; height: 100%; background: #0d0e14; overflow: hidden; }
 canvas { display: block; width: 100%; height: 100%; outline: none; touch-action: none; }
 #load { position: fixed; inset: 0; display: grid; place-content: center; gap: 14px; color: #9aa3c4; font: 500 15px -apple-system, BlinkMacSystemFont, "Inter", sans-serif; text-align: center; transition: opacity 0.4s; }
 #bar { width: 220px; height: 4px; border-radius: 4px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.embed #load { display: none; }
 #bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ff5a5f, #ff9a3c, #ffd43b, #3ddc84, #2cd4e8, #5b7cff); transition: width 0.2s; }
 </style>
 </head>
@@ -17,6 +18,9 @@ canvas { display: block; width: 100%; height: 100%; outline: none; touch-action:
 <div id="load"><span>Shelf Catch</span><div id="bar"><i></i></div></div>
 <script src="Build/game.loader.js"></script>
 <script>
+const embed = new URLSearchParams(location.search).has("embed") && window.parent !== window;
+if (embed) document.documentElement.classList.add("embed");
+const tell = (type, value) => { if (embed) window.parent.postMessage({ source: "shelf-catch", type, value }, location.origin); };
 const canvas = document.getElementById("c");
 const load = document.getElementById("load");
 const bar = document.querySelector("#bar i");
@@ -28,11 +32,13 @@ createUnityInstance(canvas, {
   productName: "Shelf Catch",
   productVersion: "1.0",
   devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
-}, (p) => { bar.style.width = `${Math.round(p * 100)}%`; }).then(() => {
+}, (p) => { bar.style.width = `${Math.round(p * 100)}%`; tell("progress", p); }).then(() => {
   load.style.opacity = "0";
   setTimeout(() => load.remove(), 400);
   canvas.focus();
-}).catch((e) => { load.firstChild.textContent = String(e); });
+  tell("ready", 1);
+}).catch((e) => { load.firstChild.textContent = String(e); tell("error", String(e)); });
+window.addEventListener("message", (e) => { if (e.origin === location.origin && e.data && e.data.source === "ledge" && e.data.type === "focus") canvas.focus(); });
 canvas.addEventListener("pointerdown", () => canvas.focus());
 </script>
 </body>

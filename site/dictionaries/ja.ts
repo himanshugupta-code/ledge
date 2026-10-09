@@ -132,6 +132,11 @@ const ja: Dict = {
   },
   video: { title: "40秒でわかるLedge。" },
   game: {
+    kicker: "Unityで制作",
+    try: "ボードの上でポインターを動かすと棚を試せます。",
+    caught: "キャッチ",
+    close: "ゲームを閉じる",
+    ready: "準備完了",
     title: "ひと休み。スクショをキャッチ。",
     body: "Shelf CatchはUnityで作った小さなゲームです。棚を動かして落ちてくるスクリーンショットを受け止め、デスクトップの散らかりをよけましょう。3回ミスで終了です。",
     play: "Shelf Catchで遊ぶ",

@@ -132,6 +132,11 @@ const es: Dict = {
   },
   video: { title: "Míralo en 40 segundos." },
   game: {
+    kicker: "Hecho con Unity",
+    try: "Mueve el puntero sobre el tablero para probar el estante.",
+    caught: "Atrapadas",
+    close: "Cerrar juego",
+    ready: "Listo",
     title: "Tómate un respiro. Atrapa capturas.",
     body: "Shelf Catch es un pequeño juego hecho en Unity. Desliza el estante para atrapar las capturas que caen y esquiva el desorden del escritorio. Tres fallos y se acabó.",
     play: "Jugar a Shelf Catch",

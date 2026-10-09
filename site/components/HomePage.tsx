@@ -78,6 +78,8 @@ export function HomePage({ lang }: { lang: Locale }) {
         privacy={m.privacy}
       />
 
+      <GameSection t={t.game} />
+
       <section className="band alt center" id="video">
         <div className="wrap">
           <Reveal as="h2" className="display">{t.video.title}</Reveal>
@@ -89,9 +91,7 @@ export function HomePage({ lang }: { lang: Locale }) {
         </div>
       </section>
 
-      <GameSection t={t.game} />
-
-      <section className="band alt">
+      <section className="band">
         <div className="wrap faq">
           <Reveal as="h2" className="display center">{t.faq.title}</Reveal>
           <Reveal>
@@ -105,7 +105,7 @@ export function HomePage({ lang }: { lang: Locale }) {
         </div>
       </section>
 
-      <section className="band center m-get">
+      <section className="band alt center m-get">
         <div className="wrap">
           <div className="m-spectrum" aria-hidden="true">
             {["#ff5a5f", "#ff9a3c", "#ffd43b", "#3ddc84", "#2cd4e8", "#5b7cff"].map((c) => (
