@@ -1,0 +1,79 @@
+export const meta = {
+  title: "Keep Screenshots Off Your Mac Desktop",
+  description:
+    "Where Mac screenshots go, how to change the save location in a few clicks or with Terminal, and how to stop them piling up on your Desktop for good.",
+  date: "2026-10-09",
+  minutes: 5,
+  keywords: [
+    "where do screenshots go on mac",
+    "change screenshot location mac",
+    "screenshots cluttering desktop mac",
+    "move screenshots off desktop",
+    "mac screenshot save location",
+  ],
+};
+
+If your Desktop is a grid of files called `Screenshot 2026-…`, you are not alone. macOS saves every screenshot there by default, and it never tidies up after itself. Here is how to send screenshots somewhere better and keep the Desktop clear.
+
+## Where do screenshots go on a Mac?
+
+Unless you have changed it, macOS saves screenshots to your **Desktop**. Each one is a PNG named with the date and time it was taken.
+
+Two exceptions:
+
+- If you add `Control` to the shortcut (for example `Control` `Shift` `Cmd` `4`), the screenshot goes to the **clipboard** instead of a file.
+- If you changed **Save to** in the Screenshot toolbar at some point, they go to that folder instead.
+
+Not sure which applies to you? Press `Shift` `Cmd` `5`, click **Options**, and look at the checkmark under **Save to**.
+
+## Change the save location in the Screenshot toolbar
+
+This is the easiest way and works on macOS Mojave and later.
+
+1. Press `Shift` `Cmd` `5`.
+2. Click **Options**.
+3. Under **Save to**, choose **Documents**, another listed location, or **Other Location…** to pick any folder.
+
+A good choice is a dedicated folder such as `Pictures/Screenshots`. Create it in Finder first, then select it with **Other Location…**. From now on, every screenshot taken with the keyboard shortcuts lands there.
+
+## Change it with Terminal
+
+If you prefer the command line, or manage several Macs, run:
+
+```sh
+mkdir -p ~/Pictures/Screenshots
+defaults write com.apple.screencapture location ~/Pictures/Screenshots
+killall SystemUIServer
+```
+
+To go back to the Desktop:
+
+```sh
+defaults delete com.apple.screencapture location
+killall SystemUIServer
+```
+
+## Clear out the screenshots already on your Desktop
+
+Changing the location only affects new screenshots. To move the old ones:
+
+1. Open a Finder window on your Desktop.
+2. Type `Screenshot` in the search field and set the scope to **Desktop**.
+3. Press `Cmd` `A` to select them all, then drag them into your new folder, or to the Trash if you do not need them.
+
+## The catch: out of sight, out of reach
+
+Once screenshots live in a folder, they are tidy but harder to grab. You take a screenshot to send it somewhere, and now you have to open Finder, find the folder and sort by date every time.
+
+That gap is what [Ledge](/en/) is for. It watches the folder your screenshots go to and keeps the most recent ones on a shelf at the top of your screen. Rest the pointer on the top edge, or press `Cmd` `Option` `L`, and drag the screenshot wherever it needs to go.
+
+Ledge can also handle the clean-up for you. Turn on **Move New Screenshots into Ledge** from its menu bar icon: new captures move into Ledge's own folder, your Desktop or screenshot folder stays empty, and screenshots go to the Trash when you take them off the shelf. Nothing is lost by accident, and nothing piles up.
+
+## Quick recap
+
+- Screenshots save to the Desktop by default.
+- Change it with `Shift` `Cmd` `5` › **Options** › **Save to**, or with `defaults write com.apple.screencapture location`.
+- Move existing screenshots by searching for `Screenshot` on the Desktop.
+- Keep recent screenshots within reach, and old ones out of the way, with [Ledge](/en/).
+
+For a broader system, read [how to organize screenshots on a Mac](/en/blog/organize-screenshots-on-mac/).

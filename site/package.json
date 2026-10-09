@@ -15,6 +15,7 @@
     "next": "^16.4.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
+    "remark-gfm": "4.0.1",
     "three": "0.185.1"
   },
   "devDependencies": {

@@ -23,8 +23,8 @@ const de: Dict = {
   theme: { group: "Farbschema", light: "Helles Design", system: "Systemdesign", dark: "Dunkles Design" },
   hero: {
     eyebrow: "Ledge",
-    title: "Ein Regal für deine Screenshots.",
-    sub: "Deine neuesten Screenshots warten am oberen Bildschirmrand, bis du sie brauchst. Bis dahin stören sie nicht.",
+    title: "Das Screenshot-Regal für deinen Mac.",
+    sub: "Ledge ist ein kostenloser Open-Source-Screenshot-Manager. Deine neuesten Screenshots warten am oberen Bildschirmrand, unauffällig, bis du sie brauchst.",
     cta: "Für Mac laden",
     film: "Video ansehen",
     note: "Kostenlos. macOS auf Apple Silicon. Mac-App-Store-Version in Prüfung.",
@@ -34,7 +34,7 @@ const de: Dict = {
     x64: "Intel-Mac",
     shelf: {
       kicker: "Das Regal",
-      title: "Jede Aufnahme landet auf dem Regal.",
+      title: "Jeder Screenshot landet auf dem Regal.",
       body: "Ledge beobachtet den Ordner, in dem deine Screenshots ohnehin landen. Mach einen wie gewohnt und er gleitet kurz darauf aufs Regal.",
       panel: "Neue Aufnahmen",
       subs: [
@@ -56,7 +56,7 @@ const de: Dict = {
     },
     drag: {
       kicker: "Ziehen & kopieren",
-      title: "Zieh es überallhin. Probier’s aus.",
+      title: "Zieh Screenshots in jede App. Probier’s aus.",
       body: "Zieh einen Screenshot vom Regal in einen Chat, eine E-Mail oder einen Ordner. Oder kopiere ihn mit einem Klick.",
       panel: "Zieh den Screenshot",
       hint: "Zieh mich auf eine App",
@@ -86,7 +86,7 @@ const de: Dict = {
     },
     keys: {
       kicker: "Tastenkürzel",
-      title: "Für alles gibt es eine Taste.",
+      title: "Für alles gibt es ein Tastenkürzel.",
       body: "Drück eine Taste auf deiner Tastatur oder tippe hier auf eine. Hervorgehobene Tasten tun etwas in Ledge.",
       panel: "Drück eine Taste",
       prompt: "Drück eine Taste",
@@ -125,18 +125,20 @@ const de: Dict = {
     },
   },
   editor: {
-    line1: "Kommentieren.",
+    line1: "Kommentieren und verpixeln.",
     line2: "Dann senden.",
     body: "Klicke auf einen Screenshot, um den Editor zu öffnen. Kommentiere mit Pfeilen und Text, verpixele Passwörter und Schlüssel, passe das Licht an, schneide zu und drehe. Alles lässt sich rückgängig machen.",
     alt: "Der Ledge-Editor mit Werkzeugleiste, einem kommentierten Screenshot mit verpixelten Schlüsseln sowie Stil- und Anpassungsbereichen.",
   },
   film: {
     hint: "Scrollen zum Öffnen",
+    free: "Kostenlos und Open Source",
     aria: "Ein kurzer Film über einen Screenshot. Ein Laptop öffnet sich, ein Screenshot entsteht und fliegt auf die Ablage von Ledge.",
     captions: ["Alles beginnt auf deinem Mac.", "Du machst einen Screenshot, wie immer.", "Ledge fängt ihn sofort auf.", "Und legt ihn auf eine Ablage, immer griffbereit."],
   },
   video: { title: "In 40 Sekunden erklärt." },
   game: {
+    hint: "Steuern mit Maus, Finger oder Pfeiltasten.",
     kicker: "Gebaut mit Unity",
     try: "Beweg den Zeiger über das Feld, um die Ablage zu testen.",
     caught: "Gefangen",
@@ -145,10 +147,10 @@ const de: Dict = {
     title: "Mach mal Pause. Fang ein paar Screenshots.",
     body: "Shelf Catch ist ein kleines Spiel, gebaut mit Unity. Schieb die Ablage, fang fallende Screenshots und weich dem Schreibtisch-Chaos aus. Drei Fehler und es ist vorbei.",
     play: "Shelf Catch spielen",
-    hint: "Steuern mit Maus, Finger oder Pfeiltasten.",
     loading: "Spiel wird geladen…",
     full: "Im Vollbild öffnen",
   },
+  guides: { title: "Screenshot-Anleitungen für den Mac", all: "Alle Anleitungen", note: "Auf Englisch" },
   faq: {
     title: "Häufige Fragen.",
     items: [
@@ -161,6 +163,9 @@ const de: Dict = {
         q: "Wie zeige ich das Regal an?",
         a: "Bewege den Zeiger an den oberen Bildschirmrand oder drücke Cmd+Option+L. Geh weg oder drücke Esc, um es einzuklappen.",
       },
+      { q: "Ist Ledge Open Source?", a: "Ja. Ledge steht unter der MIT-Lizenz und der gesamte Quellcode liegt auf GitHub. Du kannst ihn lesen, selbst bauen oder mitmachen." },
+      { q: "Wo landen Screenshots auf dem Mac und verschiebt Ledge sie?", a: "macOS sichert Screenshots auf dem Schreibtisch, außer du hast den Ort in der Bildschirmfoto-Leiste geändert (Umschalt+Cmd+5, dann Optionen). Ledge beobachtet diesen Ordner. Aktiviere das Verschieben neuer Screenshots in Ledge, damit dein Schreibtisch frei bleibt; verschobene Screenshots landen im Papierkorb, wenn du sie vom Regal nimmst." },
+      { q: "Was unterscheidet Ledge von CleanShot X oder Shottr?", a: "CleanShot X und Shottr sind Aufnahme-Tools mit Funktionen wie scrollenden Aufnahmen und Texterkennung. Ledge ändert nicht, wie du Screenshots machst, sondern hält sie griffbereit, mit einem schnellen Editor zum Markieren und Verpixeln. Es ist kostenlos, Open Source und arbeitet komplett offline." },
     ],
   },
   get: {
@@ -204,6 +209,13 @@ const de: Dict = {
     emptyBody: "Prüfe, ob der gewählte Ordner derjenige ist, in dem macOS Screenshots speichert. Ledge schaut nur in diesen Ordner.",
   },
   blog: {
+    city: { start: "Erkunden", walking: "Zu Fuß", driving: "Im Auto", enterCar: "Ins Auto steigen", exitCar: "Aussteigen", read: "Lesen", leave: "Beenden", move: "Bewegen", car: "Auto", open: "Lesen" },
+    cityLead: "Jede Anleitung ist ein Gebäude in dieser kleinen Stadt. Lauf herum, steig ins Auto und halte an einem leuchtenden Kreis, um zu lesen.",
+    heroTitle: "Mac-Screenshot-Anleitungen und Vergleiche",
+    guide: "Anleitung",
+    compare: "Vergleich",
+    next: "Weiterlesen",
+    all: "Alle Anleitungen",
     title: "Blog",
     metaTitle: "Blog: Screenshot-Tipps für den Mac",
     desc: "Praktische Tipps zum Aufnehmen, Organisieren, Kommentieren und sicheren Teilen von Screenshots auf dem Mac.",

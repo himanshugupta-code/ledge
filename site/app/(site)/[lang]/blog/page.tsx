@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "../../../../components/JsonLd";
+import { BlogCity } from "../../../../components/blog/BlogCity";
+import { PostCards } from "../../../../components/blog/PostCards";
 import { getDictionary } from "../../../../dictionaries";
 import { getAllPosts } from "../../../../lib/blog";
 import { pageMetadata } from "../../../../lib/seo";
@@ -37,27 +38,16 @@ export default async function BlogIndex({ params }: { params: Promise<{ lang: st
       url: abs(`/en/blog/${p.slug}/`),
     })),
   };
+  const lite = posts.map(({ slug, title, description, date, minutes }) => ({ slug, title, description, date, minutes }));
   return (
-    <article className="doc blog-index">
+    <div className="b-page">
       <JsonLd data={data} />
-      <h1>{t.blog.title}</h1>
-      <p className="lead-doc">{t.blog.lead}</p>
-      <ul className="posts">
-        {posts.map((p) => (
-          <li key={p.slug}>
-            <Link href={`/en/blog/${p.slug}/`}>
-              <time dateTime={p.date}>
-                {new Date(p.date).toLocaleDateString("en", { year: "numeric", month: "long", day: "numeric" })}
-              </time>
-              <h2>{p.title}</h2>
-              <p>{p.description}</p>
-              <span>
-                {t.blog.read} · {p.minutes} {t.blog.minRead}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </article>
+      <BlogCity posts={lite} title={t.blog.heroTitle} lead={t.blog.cityLead} t={t.blog.city} />
+      <section className="b-list">
+        <div className="wrap wide">
+          <PostCards posts={lite} labels={{ guide: t.blog.guide, compare: t.blog.compare, min: t.blog.minRead }} variant="feature" />
+        </div>
+      </section>
+    </div>
   );
 }
