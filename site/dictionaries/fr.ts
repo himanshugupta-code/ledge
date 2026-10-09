@@ -23,8 +23,8 @@ const fr: Dict = {
   theme: { group: "Thème de couleur", light: "Thème clair", system: "Thème du système", dark: "Thème sombre" },
   hero: {
     eyebrow: "Ledge",
-    title: "Une étagère pour vos captures d'écran.",
-    sub: "Vos captures les plus récentes attendent en haut de l'écran, discrètes jusqu'à ce que vous en ayez besoin.",
+    title: "L'étagère à captures d'écran de votre Mac.",
+    sub: "Ledge est un gestionnaire de captures d'écran gratuit et open source. Vos dernières captures attendent en haut de l'écran, discrètes jusqu'à ce que vous en ayez besoin.",
     cta: "Télécharger pour Mac",
     film: "Voir la vidéo",
     note: "Gratuit. macOS sur Apple silicon. Version Mac App Store en cours de validation.",
@@ -34,7 +34,7 @@ const fr: Dict = {
     x64: "Mac Intel",
     shelf: {
       kicker: "L'étagère",
-      title: "Chaque capture se pose sur l'étagère.",
+      title: "Chaque capture d'écran se pose sur l'étagère.",
       body: "Ledge surveille le dossier où vos captures arrivent déjà. Faites-en une comme d'habitude, elle glisse sur l'étagère un instant plus tard.",
       panel: "Nouvelles captures",
       subs: [
@@ -56,7 +56,7 @@ const fr: Dict = {
     },
     drag: {
       kicker: "Glisser et copier",
-      title: "Glissez-la n'importe où. Essayez.",
+      title: "Glissez vos captures dans n'importe quelle app. Essayez.",
       body: "Tirez une capture de l'étagère vers une discussion, un e-mail ou un dossier. Ou copiez-la en un clic.",
       panel: "Glissez la capture",
       hint: "Glissez-moi sur une app",
@@ -86,7 +86,7 @@ const fr: Dict = {
     },
     keys: {
       kicker: "Raccourcis",
-      title: "Tout a sa touche.",
+      title: "Tout a son raccourci clavier.",
       body: "Appuyez sur une touche de votre clavier ou touchez-en une ici. Les touches en surbrillance font quelque chose dans Ledge.",
       panel: "Appuyez sur une touche",
       prompt: "Appuyez sur une touche",
@@ -125,18 +125,20 @@ const fr: Dict = {
     },
   },
   editor: {
-    line1: "Annotez.",
+    line1: "Annotez et pixellisez.",
     line2: "Puis envoyez.",
     body: "Cliquez sur une capture pour ouvrir l'éditeur. Annotez avec des flèches et du texte, pixellisez mots de passe et clés, réglez la lumière, recadrez et pivotez. Annulez tout.",
     alt: "L'éditeur de Ledge avec sa barre d'outils, une capture annotée aux clés pixellisées et les panneaux de style et de réglages.",
   },
   film: {
     hint: "Faites défiler pour ouvrir",
+    free: "Gratuit et open source",
     aria: "Un court film sur une capture. Un portable s’ouvre, une capture est prise et s’envole sur l’étagère de Ledge.",
     captions: ["Tout commence sur votre Mac.", "Vous faites une capture, comme d’habitude.", "Ledge l’attrape dès qu’elle est prise.", "Et la garde sur une étagère, à portée de main."],
   },
   video: { title: "Découvrez-le en 40 secondes." },
   game: {
+    hint: "Déplacez-vous avec la souris, un doigt ou les flèches.",
     kicker: "Créé avec Unity",
     try: "Déplacez le pointeur sur le plateau pour essayer l’étagère.",
     caught: "Attrapées",
@@ -145,10 +147,10 @@ const fr: Dict = {
     title: "Faites une pause. Attrapez des captures.",
     body: "Shelf Catch est un petit jeu créé avec Unity. Faites glisser l’étagère pour attraper les captures qui tombent et évitez le désordre du bureau. Trois ratés et c’est fini.",
     play: "Jouer à Shelf Catch",
-    hint: "Déplacez-vous avec la souris, un doigt ou les flèches.",
     loading: "Chargement du jeu…",
     full: "Ouvrir en plein écran",
   },
+  guides: { title: "Guides des captures d'écran sur Mac", all: "Tous les guides", note: "En anglais" },
   faq: {
     title: "Vos questions.",
     items: [
@@ -161,6 +163,9 @@ const fr: Dict = {
         q: "Comment afficher l'étagère ?",
         a: "Posez le pointeur sur le bord supérieur de l'écran ou appuyez sur Cmd+Option+L. Éloignez-vous ou appuyez sur Échap pour la ranger.",
       },
+      { q: "Ledge est-il open source ?", a: "Oui. Ledge est sous licence MIT et tout le code source est sur GitHub. Vous pouvez le lire, le compiler vous-même ou contribuer." },
+      { q: "Où vont les captures d'écran sur Mac, et Ledge les déplace-t-il ?", a: "macOS enregistre les captures sur le Bureau, sauf si vous avez changé l'emplacement dans la barre Capture d'écran (Maj+Cmd+5, puis Options). Ledge surveille ce dossier. Activez le déplacement des nouvelles captures dans Ledge pour garder votre Bureau propre ; celles qu'il a déplacées vont à la Corbeille quand vous les retirez de l'étagère." },
+      { q: "En quoi Ledge diffère-t-il de CleanShot X ou Shottr ?", a: "CleanShot X et Shottr sont des outils de capture, avec la capture défilante ou l'OCR. Ledge ne change pas votre façon de capturer : il garde vos captures à portée de main, avec un éditeur rapide pour annoter et pixelliser. Il est gratuit, open source et fonctionne entièrement hors ligne." },
     ],
   },
   get: {
@@ -204,6 +209,13 @@ const fr: Dict = {
     emptyBody: "Vérifiez que le dossier choisi est bien celui où macOS enregistre les captures. Ledge ne regarde que ce dossier.",
   },
   blog: {
+    city: { start: "Commencer l'exploration", walking: "À pied", driving: "En voiture", enterCar: "Monter dans la voiture", exitCar: "Descendre de la voiture", read: "Lire", leave: "Quitter", move: "Se déplacer", car: "Voiture", open: "Lire" },
+    cityLead: "Chaque guide est un bâtiment de cette petite ville. Promenez-vous, montez en voiture et arrêtez-vous sur un cercle lumineux pour lire.",
+    heroTitle: "Guides et comparatifs des captures sur Mac",
+    guide: "Guide",
+    compare: "Comparatif",
+    next: "À lire ensuite",
+    all: "Tous les guides",
     title: "Blog",
     metaTitle: "Blog : astuces de captures d'écran sur Mac",
     desc: "Des conseils pratiques pour prendre, organiser, annoter et partager sans risque des captures d'écran sur Mac.",
