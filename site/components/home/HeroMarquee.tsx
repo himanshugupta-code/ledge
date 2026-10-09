@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { animate, createTimeline, stagger } from "animejs";
-import { prefersReducedMotion, spring } from "../../lib/motion";
+import { prefersReducedMotion, spring, watchVisibility } from "../../lib/motion";
 
 const PAD_X = 18;
 const PAD_Y = 12;
@@ -54,38 +54,47 @@ export function HeroMarquee({ text }: { text: string }) {
       return () => ro.disconnect();
     }
 
-    const m = measure();
-    const drag = { w: 0, h: 0 };
-    box.style.left = `${m.x}px`;
-    box.style.top = `${m.y}px`;
-    cross.style.transform = `translate(${m.x}px, ${m.y}px)`;
-    const tl = createTimeline({ delay: 450 })
-      .add(cross, { opacity: [0, 1], duration: 220, ease: "outQuad" }, 0)
-      .add(cross.firstElementChild!, { scale: [0.5, 1], rotate: [-45, 0], duration: 420, ease: "outBack" }, 0)
-      .add(box, { opacity: [0, 1], duration: 60 }, 300)
-      .add(tag, { opacity: [0, 1], duration: 160 }, 340)
-      .add(drag, {
-        w: [0, m.w],
-        h: [0, m.h],
-        duration: 1150,
-        ease: "inOutCubic",
-        onUpdate: () => {
-          box.style.width = `${drag.w}px`;
-          box.style.height = `${drag.h}px`;
-          cross.style.transform = `translate(${m.x + drag.w}px, ${m.y + drag.h}px)`;
-          tag.textContent = `${Math.round(drag.w)} × ${Math.round(drag.h)}`;
-        },
-      }, 300)
-      .add(cross, { opacity: 0, duration: 180, ease: "outQuad" }, 1520)
-      .call(settle, 1500)
-      .add(flash, { opacity: [0, 0.85, 0], duration: 380, ease: "outQuad" }, 1500)
-      .add(handles, { scale: [0, 1], duration: 650, delay: stagger(35), ease: spring(320, 15) }, 1600);
-    const nudge = () => animate(tag, { y: [-4, 0], duration: 500, ease: spring(300, 12) });
-    tl.then(nudge);
+    let tl: ReturnType<typeof createTimeline> | null = null;
+    const run = () => {
+      const m = measure();
+      const drag = { w: 0, h: 0 };
+      box.style.left = `${m.x}px`;
+      box.style.top = `${m.y}px`;
+      cross.style.transform = `translate(${m.x}px, ${m.y}px)`;
+      tl = createTimeline({ delay: 450 })
+        .add(cross, { opacity: [0, 1], duration: 220, ease: "outQuad" }, 0)
+        .add(cross.firstElementChild!, { scale: [0.5, 1], rotate: [-45, 0], duration: 420, ease: "outBack" }, 0)
+        .add(box, { opacity: [0, 1], duration: 60 }, 300)
+        .add(tag, { opacity: [0, 1], duration: 160 }, 340)
+        .add(drag, {
+          w: [0, m.w],
+          h: [0, m.h],
+          duration: 1150,
+          ease: "inOutCubic",
+          onUpdate: () => {
+            box.style.width = `${drag.w}px`;
+            box.style.height = `${drag.h}px`;
+            cross.style.transform = `translate(${m.x + drag.w}px, ${m.y + drag.h}px)`;
+            tag.textContent = `${Math.round(drag.w)} × ${Math.round(drag.h)}`;
+          },
+        }, 300)
+        .add(cross, { opacity: 0, duration: 180, ease: "outQuad" }, 1520)
+        .call(settle, 1500)
+        .add(flash, { opacity: [0, 0.85, 0], duration: 380, ease: "outQuad" }, 1500)
+        .add(handles, { scale: [0, 1], duration: 650, delay: stagger(35), ease: spring(320, 15) }, 1600);
+      tl.then(() => animate(tag, { y: [-4, 0], duration: 500, ease: spring(300, 12) }));
+    };
+    let started = false;
+    const unwatch = watchVisibility(h1, (v) => {
+      if (!v || started) return;
+      started = true;
+      run();
+    }, 0.6);
 
     return () => {
+      unwatch();
       ro.disconnect();
-      tl.revert();
+      tl?.revert();
     };
   }, [text]);
 

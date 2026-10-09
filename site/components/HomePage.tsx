@@ -1,5 +1,6 @@
 import { JsonLd } from "./JsonLd";
 import { GameSection } from "./home/GameSection";
+import { ScrollFilm } from "./home/ScrollFilm";
 import { Story } from "./home/Story";
 import { getDictionary } from "../dictionaries";
 import type { Locale } from "../lib/i18n";
@@ -56,6 +57,7 @@ export function HomePage({ lang }: { lang: Locale }) {
   return (
     <>
       <JsonLd data={graph} />
+      <ScrollFilm t={t.film} />
       <Story
         hero={{ ...t.hero, href: DMG_ARM }}
         dial={m.dial}

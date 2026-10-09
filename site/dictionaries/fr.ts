@@ -130,6 +130,11 @@ const fr: Dict = {
     body: "Cliquez sur une capture pour ouvrir l'éditeur. Annotez avec des flèches et du texte, pixellisez mots de passe et clés, réglez la lumière, recadrez et pivotez. Annulez tout.",
     alt: "L'éditeur de Ledge avec sa barre d'outils, une capture annotée aux clés pixellisées et les panneaux de style et de réglages.",
   },
+  film: {
+    hint: "Faites défiler pour ouvrir",
+    aria: "Un court film sur une capture. Un portable s’ouvre, une capture est prise et s’envole sur l’étagère de Ledge.",
+    captions: ["Tout commence sur votre Mac.", "Vous faites une capture, comme d’habitude.", "Ledge l’attrape dès qu’elle est prise.", "Et la garde sur une étagère, à portée de main."],
+  },
   video: { title: "Découvrez-le en 40 secondes." },
   game: {
     kicker: "Créé avec Unity",

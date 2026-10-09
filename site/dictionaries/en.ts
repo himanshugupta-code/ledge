@@ -133,6 +133,11 @@ const en = {
     body: "Click any screenshot to open the editor. Annotate with arrows and text, pixelate passwords and keys, adjust the light, crop and rotate. Undo anything.",
     alt: "The Ledge editor with a tool rail, an annotated screenshot with pixelated keys, and style and adjust panels.",
   },
+  film: {
+    hint: "Scroll to open",
+    aria: "A short film about a screenshot. A laptop opens, a screenshot is taken, and it flies up onto Ledge's shelf.",
+    captions: ["It starts on your Mac.", "You take a screenshot, like you always do.", "Ledge catches it the moment it's taken.", "And keeps it on a shelf, one reach away."],
+  },
   video: { title: "See it in 40 seconds." },
   game: {
     kicker: "Built with Unity",

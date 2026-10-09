@@ -130,6 +130,11 @@ const de: Dict = {
     body: "Klicke auf einen Screenshot, um den Editor zu öffnen. Kommentiere mit Pfeilen und Text, verpixele Passwörter und Schlüssel, passe das Licht an, schneide zu und drehe. Alles lässt sich rückgängig machen.",
     alt: "Der Ledge-Editor mit Werkzeugleiste, einem kommentierten Screenshot mit verpixelten Schlüsseln sowie Stil- und Anpassungsbereichen.",
   },
+  film: {
+    hint: "Scrollen zum Öffnen",
+    aria: "Ein kurzer Film über einen Screenshot. Ein Laptop öffnet sich, ein Screenshot entsteht und fliegt auf die Ablage von Ledge.",
+    captions: ["Alles beginnt auf deinem Mac.", "Du machst einen Screenshot, wie immer.", "Ledge fängt ihn sofort auf.", "Und legt ihn auf eine Ablage, immer griffbereit."],
+  },
   video: { title: "In 40 Sekunden erklärt." },
   game: {
     kicker: "Gebaut mit Unity",
