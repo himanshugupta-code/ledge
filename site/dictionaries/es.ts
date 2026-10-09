@@ -36,7 +36,7 @@ const es: Dict = {
       kicker: "El estante",
       title: "Cada captura aterriza en el estante.",
       body: "Ledge vigila la carpeta donde ya se guardan tus capturas. Haz una como siempre y aparecerá en el estante un momento después.",
-      panel: "Demo · nuevas capturas",
+      panel: "Nuevas capturas",
       subs: [
         { b: "Sin configuración", s: "Sigue tu carpeta de capturas automáticamente." },
         { b: "Lo más nuevo primero", s: "Las capturas antiguas salen por el final del estante." },
@@ -47,7 +47,7 @@ const es: Dict = {
       kicker: "La aparición",
       title: "Lleva el puntero al borde superior.",
       body: "Apoya el puntero en la parte superior de cualquier pantalla y el estante baja. Aléjate y se vuelve a guardar solo.",
-      panel: "Demo · aparición desde el borde",
+      panel: "Aparición desde el borde",
       subs: [
         { b: "Cada pantalla", s: "El estante baja en la pantalla donde esté el puntero." },
         { b: "⌘ ⌥ L", s: "Muéstralo u ocúltalo con el teclado." },
@@ -58,7 +58,7 @@ const es: Dict = {
       kicker: "Arrastrar y copiar",
       title: "Arrástrala a cualquier sitio. Pruébalo.",
       body: "Saca una captura del estante y suéltala en un chat, un correo o una carpeta. O cópiala con un clic.",
-      panel: "Interactivo · arrastra la captura",
+      panel: "Arrastra la captura",
       hint: "Arrástrame a una app",
       card: "Una captura que puedes arrastrar",
       shared: "Compartida en {app}",
@@ -75,7 +75,7 @@ const es: Dict = {
     },
     editor: {
       kicker: "El editor",
-      panel: "Demo · avanza al desplazarte",
+      panel: "Avanza al desplazarte",
       note: "Rota estas claves antes del lanzamiento",
       steps: { box: "Rectángulo", arrow: "Flecha", text: "Texto", pixelate: "Pixelar", adjust: "Ajustes" },
       subs: [
@@ -88,7 +88,7 @@ const es: Dict = {
       kicker: "Atajos",
       title: "Todo tiene su tecla.",
       body: "Pulsa una tecla en tu teclado o toca una aquí. Las teclas resaltadas hacen algo en Ledge.",
-      panel: "Interactivo · pulsa cualquier tecla",
+      panel: "Pulsa cualquier tecla",
       prompt: "Pulsa una tecla",
       none: "No es un atajo de Ledge. Prueba una tecla resaltada.",
       actions: {
@@ -115,7 +115,7 @@ const es: Dict = {
       title: "Tus capturas nunca salen de tu Mac.",
       body: "Sin cuenta, sin analíticas y sin peticiones de red. Ledge lee la carpeta que le indiques y nada más.",
       panel: "Tu Mac",
-      caption: "TU MAC",
+      caption: "Tu Mac",
       aria: "Tarjetas de capturas flotando dentro de un círculo cerrado que representa tu Mac",
       stats: [
         { v: "0", l: "Cuentas" },

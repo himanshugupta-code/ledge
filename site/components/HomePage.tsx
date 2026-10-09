@@ -1,6 +1,4 @@
 import { JsonLd } from "./JsonLd";
-import { Reveal } from "./Reveal";
-import { SplitWords } from "./home/SplitWords";
 import { GameSection } from "./home/GameSection";
 import { Story } from "./home/Story";
 import { getDictionary } from "../dictionaries";
@@ -80,46 +78,58 @@ export function HomePage({ lang }: { lang: Locale }) {
 
       <GameSection t={t.game} />
 
-      <section className="band alt center" id="video">
-        <div className="wrap">
-          <Reveal as="h2" className="display">{t.video.title}</Reveal>
-          <Reveal>
+      <section className="band alt" id="video">
+        <div className="wrap wide">
+          <div className="m-head">
+            <h2 className="display">{t.video.title}</h2>
+          </div>
+          <div className="m-panel m-video-window">
+            <div className="m-panel-bar">
+              <span>ledge-intro.mp4</span>
+            </div>
             <video controls preload="none" poster={asset("/ledge-intro-poster.jpg")}>
               <source src={asset("/ledge-intro.mp4")} type="video/mp4" />
             </video>
-          </Reveal>
+          </div>
         </div>
       </section>
 
       <section className="band">
-        <div className="wrap faq">
-          <Reveal as="h2" className="display center">{t.faq.title}</Reveal>
-          <Reveal>
+        <div className="wrap wide m-faq">
+          <h2 className="display">{t.faq.title}</h2>
+          <div className="faq">
             {t.faq.items.map((f) => (
               <details key={f.q}>
                 <summary>{f.q}</summary>
                 <p>{f.a}</p>
               </details>
             ))}
-          </Reveal>
+          </div>
         </div>
       </section>
 
-      <section className="band alt center m-get">
-        <div className="wrap">
-          <div className="m-spectrum" aria-hidden="true">
-            {["#ff5a5f", "#ff9a3c", "#ffd43b", "#3ddc84", "#2cd4e8", "#5b7cff"].map((c) => (
-              <i key={c} style={{ ["--c" as string]: c }} />
-            ))}
+      <section className="m-get">
+        <div className="wrap wide">
+          <div className="m-get-card">
+            <div className="m-get-title">
+              <h2 className="display">{t.get.title}</h2>
+              <span className="m-sel done static" aria-hidden="true">
+                {["tl", "tr", "br", "bl"].map((h) => (
+                  <i key={h} className={h} />
+                ))}
+              </span>
+            </div>
+            <div className="m-get-side">
+              <p className="lede">{t.get.body}</p>
+              <p className="m-get-cta">
+                <a className="btn" href={DMG_ARM}>
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  {t.get.cta}
+                </a>
+                <a className="btn ghost" href={DMG_X64}>{m.x64}</a>
+              </p>
+            </div>
           </div>
-          <SplitWords text={t.get.title} className="display" />
-          <Reveal as="p" className="lede" delay={100}>{t.get.body}</Reveal>
-          <Reveal delay={200}>
-            <p className="m-get-cta">
-              <a className="btn" href={DMG_ARM}>{t.get.cta}</a>
-              <a className="btn ghost" href={DMG_X64}>{m.x64}</a>
-            </p>
-          </Reveal>
         </div>
       </section>
     </>

@@ -36,7 +36,7 @@ const de: Dict = {
       kicker: "Das Regal",
       title: "Jede Aufnahme landet auf dem Regal.",
       body: "Ledge beobachtet den Ordner, in dem deine Screenshots ohnehin landen. Mach einen wie gewohnt und er gleitet kurz darauf aufs Regal.",
-      panel: "Demo · neue Aufnahmen",
+      panel: "Neue Aufnahmen",
       subs: [
         { b: "Keine Einrichtung", s: "Folgt automatisch deinem Screenshot-Ordner." },
         { b: "Neueste zuerst", s: "Ältere Aufnahmen rutschen am Ende vom Regal." },
@@ -47,7 +47,7 @@ const de: Dict = {
       kicker: "Das Einblenden",
       title: "Greif an den oberen Rand.",
       body: "Halte den Zeiger an den oberen Rand eines Bildschirms und das Regal gleitet herunter. Geh weg und es verschwindet von selbst.",
-      panel: "Demo · Einblenden am oberen Rand",
+      panel: "Einblenden am oberen Rand",
       subs: [
         { b: "Jeder Bildschirm", s: "Das Regal erscheint auf dem Bildschirm, auf dem dein Zeiger ist." },
         { b: "⌘ ⌥ L", s: "Ein- und ausblenden per Tastatur." },
@@ -58,7 +58,7 @@ const de: Dict = {
       kicker: "Ziehen & kopieren",
       title: "Zieh es überallhin. Probier’s aus.",
       body: "Zieh einen Screenshot vom Regal in einen Chat, eine E-Mail oder einen Ordner. Oder kopiere ihn mit einem Klick.",
-      panel: "Interaktiv · zieh den Screenshot",
+      panel: "Zieh den Screenshot",
       hint: "Zieh mich auf eine App",
       card: "Ein Screenshot zum Ziehen",
       shared: "Geteilt in {app}",
@@ -75,7 +75,7 @@ const de: Dict = {
     },
     editor: {
       kicker: "Der Editor",
-      panel: "Demo · läuft beim Scrollen",
+      panel: "Läuft beim Scrollen",
       note: "Diese Schlüssel vor dem Launch erneuern",
       steps: { box: "Rechteck", arrow: "Pfeil", text: "Text", pixelate: "Verpixeln", adjust: "Anpassen" },
       subs: [
@@ -88,7 +88,7 @@ const de: Dict = {
       kicker: "Tastenkürzel",
       title: "Für alles gibt es eine Taste.",
       body: "Drück eine Taste auf deiner Tastatur oder tippe hier auf eine. Hervorgehobene Tasten tun etwas in Ledge.",
-      panel: "Interaktiv · drück eine Taste",
+      panel: "Drück eine Taste",
       prompt: "Drück eine Taste",
       none: "Kein Ledge-Kürzel. Probier eine hervorgehobene Taste.",
       actions: {
@@ -115,7 +115,7 @@ const de: Dict = {
       title: "Deine Screenshots verlassen nie deinen Mac.",
       body: "Kein Konto, keine Analyse und keine Netzwerkanfragen. Ledge liest nur den einen Ordner, den du auswählst.",
       panel: "Dein Mac",
-      caption: "DEIN MAC",
+      caption: "Dein Mac",
       aria: "Screenshot-Karten treiben in einem geschlossenen Kreis, der deinen Mac darstellt",
       stats: [
         { v: "0", l: "Konten" },

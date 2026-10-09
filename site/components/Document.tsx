@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Archivo, Inter } from "next/font/google";
 import Link from "next/link";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
@@ -7,12 +7,13 @@ import type { Locale } from "../lib/i18n";
 import { asset, DMG_ARM, REPO } from "../lib/site";
 
 const inter = Inter({ subsets: ["latin", "latin-ext"], display: "swap", variable: "--font-inter" });
+const archivo = Archivo({ subsets: ["latin", "latin-ext"], display: "swap", axes: ["wdth"], variable: "--font-archivo" });
 
 /** The full HTML document shell shared by every page and language. */
 export function Document({ lang, children }: { lang: Locale; children: React.ReactNode }) {
   const t = getDictionary(lang);
   return (
-    <html lang={lang} className={inter.variable} suppressHydrationWarning>
+    <html lang={lang} className={`${inter.variable} ${archivo.variable}`} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -43,10 +44,11 @@ export function Document({ lang, children }: { lang: Locale; children: React.Rea
             <LanguageSwitcher current={lang} label={t.footer.languages} />
             <div className="foot-row">
               <span>{t.footer.rights}</span>
-              <span>
-                <Link href={`/${lang}/privacy/`}>{t.footer.privacy}</Link> &nbsp;·&nbsp;{" "}
-                <Link href={`/${lang}/support/`}>{t.footer.support}</Link> &nbsp;·&nbsp;{" "}
-                <Link href="/en/blog/">{t.footer.blog}</Link> &nbsp;·&nbsp; <a href={REPO}>{t.footer.source}</a>
+              <span className="foot-links">
+                <Link href={`/${lang}/privacy/`}>{t.footer.privacy}</Link>
+                <Link href={`/${lang}/support/`}>{t.footer.support}</Link>
+                <Link href="/en/blog/">{t.footer.blog}</Link>
+                <a href={REPO}>{t.footer.source}</a>
               </span>
             </div>
           </div>
