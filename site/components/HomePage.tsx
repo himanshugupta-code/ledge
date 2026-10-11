@@ -2,12 +2,16 @@ import { JsonLd } from "./JsonLd";
 import { GameSection } from "./home/GameSection";
 import { ScrollFilm } from "./home/ScrollFilm";
 import { Story } from "./home/Story";
+import Link from "next/link";
 import { getDictionary } from "../dictionaries";
+import { getAllPosts } from "../lib/blog";
+import { PostCards } from "./blog/PostCards";
 import type { Locale } from "../lib/i18n";
-import { abs, asset, AUTHOR, DMG_ARM, DMG_X64, RELEASE } from "../lib/site";
+import { abs, asset, AUTHOR, DMG_ARM, DMG_X64, RELEASE, REPO } from "../lib/site";
 
-export function HomePage({ lang }: { lang: Locale }) {
+export async function HomePage({ lang }: { lang: Locale }) {
   const t = getDictionary(lang);
+  const posts = (await getAllPosts()).slice(0, 6).map(({ slug, title, description, date, minutes }) => ({ slug, title, description, date, minutes }));
   const m = t.motion;
   const home = abs(`/${lang}/`);
 
@@ -34,12 +38,26 @@ export function HomePage({ lang }: { lang: Locale }) {
         applicationCategory: "UtilitiesApplication",
         operatingSystem: "macOS",
         softwareVersion: "1.0",
+        isAccessibleForFree: true,
+        license: "https://opensource.org/licenses/MIT",
+        sameAs: [REPO],
         downloadUrl: RELEASE,
         image: abs("/og.png"),
         screenshot: [abs("/editor.png")],
         keywords: t.meta.keywords.join(", "),
         offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
         author: { "@id": abs("/#author") },
+      },
+      {
+        "@type": "VideoObject",
+        "@id": `${home}#video`,
+        name: t.video.title,
+        description: t.meta.description,
+        inLanguage: "en",
+        thumbnailUrl: abs("/ledge-intro-poster.jpg"),
+        contentUrl: abs("/ledge-intro.mp4"),
+        uploadDate: "2026-10-08",
+        duration: "PT40S",
       },
       {
         "@type": "FAQPage",
@@ -57,7 +75,7 @@ export function HomePage({ lang }: { lang: Locale }) {
   return (
     <>
       <JsonLd data={graph} />
-      <ScrollFilm t={t.film} />
+      <ScrollFilm t={t.film} cta={t.hero.cta} href={DMG_ARM} />
       <Story
         hero={{ ...t.hero, href: DMG_ARM }}
         dial={m.dial}
@@ -96,7 +114,20 @@ export function HomePage({ lang }: { lang: Locale }) {
         </div>
       </section>
 
-      <section className="band">
+      <section className="band" id="guides">
+        <div className="wrap wide">
+          <div className="m-head">
+            <h2 className="display">{t.guides.title}</h2>
+            {t.guides.note && <p className="lede">{t.guides.note}</p>}
+          </div>
+          <PostCards posts={posts} labels={{ guide: t.blog.guide, compare: t.blog.compare, min: t.blog.minRead }} />
+          <p className="m-guides-all">
+            <Link href="/en/blog/" hrefLang="en">{t.guides.all} →</Link>
+          </p>
+        </div>
+      </section>
+
+      <section className="band alt">
         <div className="wrap wide m-faq">
           <h2 className="display">{t.faq.title}</h2>
           <div className="faq">

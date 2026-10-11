@@ -1,0 +1,81 @@
+export const meta = {
+  title: "How to Organize Screenshots on a Mac",
+  description:
+    "A simple system for Mac screenshots: choose where they save, keep your Desktop clear, find recent ones fast, clean up old ones and share them safely.",
+  date: "2026-10-09",
+  minutes: 7,
+  keywords: [
+    "organize screenshots mac",
+    "screenshot organizer mac",
+    "screenshot manager mac",
+    "find recent screenshots mac",
+    "delete old screenshots mac",
+    "clean up desktop screenshots",
+  ],
+};
+
+Most people never decide how to handle screenshots on their Mac. They just pile up on the Desktop, named by date and time, until finding last Tuesday's error message means squinting at forty identical icons.
+
+You do not need a complicated filing system. You need four habits: a fixed place for screenshots to land, a quick way to reach the newest ones, a regular clean-up, and a safe way to share. This guide walks through each one using what is built into macOS, plus where a small app like [Ledge](/en/) can help.
+
+## 1. Choose where screenshots are saved
+
+By default macOS saves every screenshot to your Desktop as a PNG named something like `Screenshot 2026-10-09 at 10.41.12`. That is convenient for a day and chaotic after a month.
+
+To change it:
+
+1. Press `Shift` `Cmd` `5` to open the Screenshot toolbar.
+2. Click **Options**.
+3. Under **Save to**, pick a folder, or choose **Other Location…** and create one, for example `Pictures/Screenshots`.
+
+The setting sticks, so every screenshot from now on goes there. If you prefer Terminal, the same change is:
+
+```sh
+defaults write com.apple.screencapture location ~/Pictures/Screenshots
+killall SystemUIServer
+```
+
+We cover this in more detail, including how to undo it, in [how to keep screenshots off your Mac Desktop](/en/blog/keep-screenshots-off-mac-desktop/).
+
+## 2. Keep the newest screenshots within reach
+
+Moving screenshots off the Desktop solves the clutter but creates a new problem: now they are hidden in a folder. Most of the time you only need the last few, usually within minutes of taking them.
+
+Some built-in options:
+
+- **The floating thumbnail.** For a few seconds after a capture, macOS shows a thumbnail in the corner of the screen. Drag it straight into an app, or click it to mark it up.
+- **Copy instead of save.** Add `Control` to any shortcut (for example `Control` `Shift` `Cmd` `4`) to put the screenshot on the clipboard instead of creating a file.
+- **A Dock stack.** Drag your screenshots folder into the right side of the Dock and sort it by date added.
+
+[Ledge](/en/) takes a different approach: it watches your screenshot folder and keeps your most recent captures on a shelf along the top of the screen. Rest the pointer against the top edge, or press `Cmd` `Option` `L`, and the shelf slides down. From there you can drag a screenshot into Slack, Mail or a Finder window, copy it with one click, or open it in the editor.
+
+## 3. Name and file the ones you want to keep
+
+Most screenshots are disposable. A few are worth keeping: receipts, settings you will need again, design references, bug evidence. For those:
+
+- **Rename them right away.** Select the file in Finder, press `Return`, and give it a name you would search for, such as `wifi-settings-office.png`.
+- **Use tags.** Right-click › **Tags** lets you file screenshots by project without moving them. Tags are searchable in Finder and Spotlight.
+- **Use Spotlight to find text.** On recent versions of macOS, Spotlight can find text inside images, so searching for a word that appears in a screenshot often finds it.
+
+## 4. Clean up on a schedule
+
+Screenshots are the fastest-growing junk on most Macs. Two easy ways to keep them under control:
+
+- **Sort by date and delete in bulk.** Open your screenshots folder in Finder, switch to List view, sort by **Date Added**, select everything older than a few weeks and move it to the Trash.
+- **Let an app do it for you.** In Ledge, turn on **Move New Screenshots into Ledge**. New captures move out of your screenshot folder into Ledge's own folder, and when you take one off the shelf it goes to the Trash. The shelf keeps your 24 most recent screenshots, so old ones naturally roll off the end.
+
+## 5. Share safely
+
+Before a screenshot leaves your Mac, look at the whole image once more. API keys, email addresses, customer names, notification banners and browser tabs leak all the time. Cover secrets completely or pixelate them; our guide on [how to blur sensitive info in Mac screenshots](/en/blog/blur-sensitive-info-in-mac-screenshots/) shows how.
+
+When you are ready to send, [drag the screenshot straight into the app](/en/blog/drag-screenshot-into-any-app-mac/) instead of hunting for the file.
+
+## A simple setup that works
+
+1. Save screenshots to `Pictures/Screenshots` instead of the Desktop.
+2. Reach the newest ones from the top of the screen with [Ledge](/en/), or from a Dock stack.
+3. Rename and tag the few worth keeping.
+4. Clear out old screenshots every few weeks, or let Ledge send them to the Trash as you go.
+5. Check for sensitive details before sharing.
+
+Ledge is free, open source and works entirely on your Mac, with no account and no network requests. If you want to compare it with other tools first, see [Ledge vs Shottr](/en/blog/ledge-vs-shottr/), [Ledge vs CleanShot X](/en/blog/ledge-vs-cleanshot-x/) and [Ledge vs Dropover](/en/blog/ledge-vs-dropover/).

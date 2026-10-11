@@ -23,8 +23,8 @@ const es: Dict = {
   theme: { group: "Tema de color", light: "Tema claro", system: "Tema del sistema", dark: "Tema oscuro" },
   hero: {
     eyebrow: "Ledge",
-    title: "Un estante para tus capturas.",
-    sub: "Tus capturas más recientes esperan en el borde superior de la pantalla, fuera de tu camino hasta que las necesitas.",
+    title: "El estante de capturas para tu Mac.",
+    sub: "Ledge es un gestor de capturas de pantalla gratuito y de código abierto. Tus capturas más recientes esperan en la parte superior de la pantalla, sin estorbar hasta que las necesitas.",
     cta: "Descargar para Mac",
     film: "Ver el vídeo",
     note: "Gratis. macOS en Apple silicon. Versión de la Mac App Store en revisión.",
@@ -34,7 +34,7 @@ const es: Dict = {
     x64: "Mac con Intel",
     shelf: {
       kicker: "El estante",
-      title: "Cada captura aterriza en el estante.",
+      title: "Cada captura de pantalla aterriza en el estante.",
       body: "Ledge vigila la carpeta donde ya se guardan tus capturas. Haz una como siempre y aparecerá en el estante un momento después.",
       panel: "Nuevas capturas",
       subs: [
@@ -56,7 +56,7 @@ const es: Dict = {
     },
     drag: {
       kicker: "Arrastrar y copiar",
-      title: "Arrástrala a cualquier sitio. Pruébalo.",
+      title: "Arrastra capturas a cualquier app. Pruébalo.",
       body: "Saca una captura del estante y suéltala en un chat, un correo o una carpeta. O cópiala con un clic.",
       panel: "Arrastra la captura",
       hint: "Arrástrame a una app",
@@ -86,7 +86,7 @@ const es: Dict = {
     },
     keys: {
       kicker: "Atajos",
-      title: "Todo tiene su tecla.",
+      title: "Todo tiene su atajo de teclado.",
       body: "Pulsa una tecla en tu teclado o toca una aquí. Las teclas resaltadas hacen algo en Ledge.",
       panel: "Pulsa cualquier tecla",
       prompt: "Pulsa una tecla",
@@ -125,18 +125,20 @@ const es: Dict = {
     },
   },
   editor: {
-    line1: "Anótala.",
+    line1: "Anota y pixela.",
     line2: "Y envíala.",
     body: "Haz clic en cualquier captura para abrir el editor. Anota con flechas y texto, pixela contraseñas y claves, ajusta la luz, recorta y gira. Deshaz lo que quieras.",
     alt: "El editor de Ledge con barra de herramientas, una captura anotada con claves pixeladas y paneles de estilo y ajustes.",
   },
   film: {
     hint: "Desplázate para abrir",
+    free: "Gratis y de código abierto",
     aria: "Un corto sobre una captura. Se abre un portátil, se hace una captura y sube volando al estante de Ledge.",
     captions: ["Todo empieza en tu Mac.", "Haces una captura, como siempre.", "Ledge la atrapa en cuanto la haces.", "Y la guarda en un estante, a mano."],
   },
   video: { title: "Míralo en 40 segundos." },
   game: {
+    hint: "Muévete con el ratón, un dedo o las flechas.",
     kicker: "Hecho con Unity",
     try: "Mueve el puntero sobre el tablero para probar el estante.",
     caught: "Atrapadas",
@@ -145,10 +147,10 @@ const es: Dict = {
     title: "Tómate un respiro. Atrapa capturas.",
     body: "Shelf Catch es un pequeño juego hecho en Unity. Desliza el estante para atrapar las capturas que caen y esquiva el desorden del escritorio. Tres fallos y se acabó.",
     play: "Jugar a Shelf Catch",
-    hint: "Muévete con el ratón, un dedo o las flechas.",
     loading: "Cargando el juego…",
     full: "Abrir a pantalla completa",
   },
+  guides: { title: "Guías de capturas de pantalla para Mac", all: "Todas las guías", note: "En inglés" },
   faq: {
     title: "Preguntas frecuentes.",
     items: [
@@ -161,6 +163,9 @@ const es: Dict = {
         q: "¿Cómo muestro el estante?",
         a: "Apoya el puntero en el borde superior de la pantalla o pulsa Cmd+Opción+L. Aléjate o pulsa Esc para recogerlo.",
       },
+      { q: "¿Ledge es de código abierto?", a: "Sí. Ledge tiene licencia MIT y todo el código fuente está en GitHub. Puedes leerlo, compilarlo tú mismo o contribuir." },
+      { q: "¿Dónde se guardan las capturas en el Mac y Ledge las mueve?", a: "macOS guarda las capturas en el Escritorio salvo que cambies la ubicación en la barra de Captura de pantalla (Mayús+Cmd+5 y luego Opciones). Ledge vigila esa carpeta. Activa la opción de mover las capturas nuevas a Ledge para mantener limpio el Escritorio; las que movió van a la Papelera cuando las quitas del estante." },
+      { q: "¿En qué se diferencia Ledge de CleanShot X o Shottr?", a: "CleanShot X y Shottr son herramientas de captura con funciones como la captura con desplazamiento y el OCR. Ledge no cambia cómo haces capturas; mantiene a mano las que tomas, con un editor rápido para anotar y pixelar. Es gratuito, de código abierto y funciona sin conexión." },
     ],
   },
   get: {
@@ -204,6 +209,13 @@ const es: Dict = {
     emptyBody: "Comprueba que la carpeta elegida es la que macOS usa para guardar las capturas. Ledge solo mira esa carpeta.",
   },
   blog: {
+    city: { start: "Empezar a explorar", walking: "Caminando", driving: "Conduciendo", enterCar: "Subir al coche", exitCar: "Bajar del coche", read: "Leer", leave: "Salir", move: "Moverse", car: "Coche", open: "Leer" },
+    cityLead: "Cada guía es un edificio de esta pequeña ciudad. Camina, súbete al coche y para en un círculo brillante para leer.",
+    heroTitle: "Guías y comparativas de capturas en Mac",
+    guide: "Guía",
+    compare: "Comparativa",
+    next: "Sigue leyendo",
+    all: "Todas las guías",
     title: "Blog",
     metaTitle: "Blog: consejos de capturas en Mac",
     desc: "Consejos prácticos para hacer, organizar, anotar y compartir capturas de pantalla con seguridad en Mac.",

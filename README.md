@@ -2,6 +2,8 @@
 
 A shelf for your screenshots along the top of the screen. Out of the way until you reach for it.
 
+**Website:** [himanshugupta-code.github.io/ledge](https://himanshugupta-code.github.io/ledge/en/) · **Download:** [Apple silicon](https://github.com/himanshugupta-code/ledge/releases/latest/download/Ledge-mac-arm64.dmg) · [Intel](https://github.com/himanshugupta-code/ledge/releases/latest/download/Ledge-mac-x64.dmg) · **Guides:** [Organize screenshots on a Mac](https://himanshugupta-code.github.io/ledge/en/blog/organize-screenshots-on-mac/)
+
 <a href="docs/ledge-intro.mp4"><img src="docs/ledge-intro-poster.jpg" alt="Play the 40-second Ledge intro video: screenshots landing on the ledge, the pointer revealing it from the top edge, copying and dragging a screenshot, and the editor annotating and pixelating an image." width="100%"></a>
 
 <picture>

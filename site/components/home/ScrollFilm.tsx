@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import type * as THREE_NS from "three";
 import { SPECTRUM, clamp01, prefersReducedMotion } from "../../lib/motion";
 
-type FilmText = { hint: string; aria: string; captions: string[] };
+type FilmText = { hint: string; aria: string; captions: string[]; free: string };
 
 const WINDOWS: [number, number][] = [
   [0.13, 0.27],
@@ -15,12 +15,11 @@ const WINDOWS: [number, number][] = [
 
 const SCREEN_W = 3.18;
 const SCREEN_H = 1.99;
-const KEY_COLS = 14;
-const KEY_ROWS = 6;
+const LIFT = 0.83;
 const TEX_W = 1600;
 const TEX_H = Math.round((TEX_W * SCREEN_H) / SCREEN_W);
 const REGION = { x: 820, y: 190, w: 660, h: 470 };
-const SHELF_Y = 3.3;
+const SHELF_Y = 3.3 + LIFT;
 const SHELF_Z = -1.05;
 const SLOTS = [-1.2, -0.4, 0.4, 1.2];
 const CARD_W = 0.64;
@@ -31,14 +30,14 @@ const seg = (p: number, a: number, b: number) => clamp01((p - a) / (b - a));
 type Key = { p: number; pos: [number, number, number]; look: [number, number, number] };
 
 const KEYS: Key[] = [
-  { p: 0, pos: [4.6, 3.8, 5.6], look: [0, 0.35, 0] },
-  { p: 0.12, pos: [3.9, 2.9, 5.0], look: [0, 0.45, -0.1] },
-  { p: 0.3, pos: [0.25, 2.0, 5.2], look: [0, 1.0, -0.7] },
-  { p: 0.45, pos: [0.32, 1.3, 1.45], look: [0.32, 1.2, -1.4] },
-  { p: 0.6, pos: [0.46, 1.26, 1.2], look: [0.46, 1.2, -1.4] },
-  { p: 0.72, pos: [0.25, 2.05, 3.0], look: [0.1, 2.8, -0.9] },
-  { p: 0.86, pos: [-0.2, 2.85, 3.3], look: [0, 3.35, -1.0] },
-  { p: 1, pos: [3.0, 2.7, 7.0], look: [0, 1.75, -0.5] },
+  { p: 0, pos: [4.6, 3.6, 5.8], look: [0, 0.55, 0] },
+  { p: 0.12, pos: [3.6, 2.6, 5.2], look: [0, 0.7, -0.2] },
+  { p: 0.3, pos: [0.25, 2.0 + LIFT, 5.4], look: [0, 1.0 + LIFT, -0.7] },
+  { p: 0.45, pos: [0.32, 1.3 + LIFT, 1.45], look: [0.32, 1.2 + LIFT, -1.4] },
+  { p: 0.6, pos: [0.46, 1.26 + LIFT, 1.2], look: [0.46, 1.2 + LIFT, -1.4] },
+  { p: 0.72, pos: [0.25, 2.05 + LIFT, 3.0], look: [0.1, 2.8 + LIFT, -0.9] },
+  { p: 0.86, pos: [-0.2, 2.85 + LIFT, 3.3], look: [0, 3.35 + LIFT, -1.0] },
+  { p: 1, pos: [3.4, 3.0 + LIFT * 0.6, 7.6], look: [0, 1.6 + LIFT * 0.6, -0.5] },
 ];
 
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
@@ -308,7 +307,7 @@ function thumb(font: string, color: string, kind: number) {
   return c;
 }
 
-export function ScrollFilm({ t }: { t: FilmText }) {
+export function ScrollFilm({ t, cta, href }: { t: FilmText; cta: string; href: string }) {
   const root = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -330,6 +329,7 @@ export function ScrollFilm({ t }: { t: FilmText }) {
 
     const overlay = (p: number) => {
       title.style.opacity = String(1 - seg(p, 0.03, 0.09));
+      title.style.visibility = seg(p, 0.03, 0.09) >= 1 ? "hidden" : "visible";
       title.style.transform = `translateY(${-seg(p, 0.03, 0.09) * 40}px)`;
       caps.forEach((c, i) => {
         const [a, b] = WINDOWS[i];
@@ -396,110 +396,30 @@ export function ScrollFilm({ t }: { t: FilmText }) {
       floor.receiveShadow = true;
       scene.add(floor);
 
-      const rimBlue = new THREE.PointLight(0x6e95ff, 1.3, 0, 0);
+      const rimBlue = new THREE.PointLight(0x6e95ff, 2.4, 0, 0);
       rimBlue.position.set(-5, 2.5, -4);
       scene.add(rimBlue);
-      const rimWarm = new THREE.PointLight(0xffa25a, 1.0, 0, 0);
+      const rimWarm = new THREE.PointLight(0xffa25a, 1.6, 0, 0);
       rimWarm.position.set(5, 1.8, -3.5);
       scene.add(rimWarm);
+      const coreLight = new THREE.PointLight(0x9fb8ff, 0, 0, 0);
+      coreLight.position.set(0, 0.55, -0.35);
+      scene.add(coreLight);
 
-      const shell = new THREE.MeshStandardMaterial({ color: 0x2c3038, metalness: 0.82, roughness: 0.42, envMapIntensity: 0.7 });
-      const shellEdge = new THREE.MeshStandardMaterial({ color: 0x3a3f49, metalness: 0.95, roughness: 0.18 });
-      const black = new THREE.MeshStandardMaterial({ color: 0x07080b, metalness: 0.3, roughness: 0.4 });
-      const keyMat = new THREE.MeshStandardMaterial({ color: 0x15171c, metalness: 0.2, roughness: 0.6, emissive: 0x6e95ff, emissiveIntensity: 0 });
-
-      const laptop = new THREE.Group();
-      scene.add(laptop);
-      const base = new THREE.Mesh(new RoundedBoxGeometry(3.3, 0.075, 2.25, 6, 0.034), shell);
-      base.position.y = 0.0375;
-      base.castShadow = true;
-      base.receiveShadow = true;
-      laptop.add(base);
-      const lip = new THREE.Mesh(new THREE.BoxGeometry(3.22, 0.004, 0.004), shellEdge);
-      lip.position.set(0, 0.073, 1.122);
-      laptop.add(lip);
-
-      const well = new THREE.Mesh(new THREE.PlaneGeometry(2.9, 1.16), black);
-      well.rotation.x = -Math.PI / 2;
-      well.position.set(0, 0.0752, -0.42);
-      laptop.add(well);
-
-      const glowCv = document.createElement("canvas");
-      glowCv.width = 512;
-      glowCv.height = 208;
-      const gcx = glowCv.getContext("2d")!;
-      gcx.fillStyle = "#000";
-      gcx.fillRect(0, 0, 512, 208);
-      for (let r = 0; r < KEY_ROWS; r++) {
-        for (let c = 0; c < KEY_COLS; c++) {
-          const gx = 8 + c * 35.6;
-          const gy = 8 + r * 32.5;
-          const kg = gcx.createRadialGradient(gx + 15, gy + 13, 2, gx + 15, gy + 13, 24);
-          kg.addColorStop(0, "rgba(140,170,255,0.9)");
-          kg.addColorStop(1, "rgba(140,170,255,0)");
-          gcx.fillStyle = kg;
-          gcx.fillRect(gx - 12, gy - 12, 54, 50);
-        }
-      }
-      const glowTex = new THREE.CanvasTexture(glowCv);
-      glowTex.colorSpace = THREE.SRGBColorSpace;
-      const backlightMat = new THREE.MeshBasicMaterial({ map: glowTex, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false });
-      const backlight = new THREE.Mesh(new THREE.PlaneGeometry(2.86, 1.14), backlightMat);
-      backlight.rotation.x = -Math.PI / 2;
-      backlight.position.set(0, 0.0756, -0.42);
-      laptop.add(backlight);
-
-      const keyGeo = new RoundedBoxGeometry(0.168, 0.022, 0.15, 2, 0.01);
-      const keys = new THREE.InstancedMesh(keyGeo, keyMat, KEY_COLS * KEY_ROWS);
-      keys.castShadow = true;
-      const keyInfo: { x: number; z: number; d: number }[] = [];
-      for (let r = 0; r < KEY_ROWS; r++) {
-        for (let c = 0; c < KEY_COLS; c++) {
-          const x = -1.3 + c * 0.2;
-          const z = -0.92 + r * 0.183;
-          keyInfo.push({ x, z, d: Math.hypot(x / 1.4, (z + 0.45) / 0.55) / 1.45 });
-        }
-      }
-      const m4 = new THREE.Matrix4();
-      let lastRise = -1;
-      const setKeys = (open: number, time: number) => {
-        const key = Math.round(open * 400);
-        if (key === lastRise && (open === 0 || open === 1)) return;
-        lastRise = key;
-        keyInfo.forEach((ki, n) => {
-          const t = clamp01((open - ki.d * 0.55) / 0.45);
-          const e = t === 1 ? 1 : 1 - Math.pow(1 - t, 3) * (1 + 2.2 * t);
-          m4.makeTranslation(ki.x, 0.0745 - 0.012 + 0.0225 * e, ki.z);
-          keys.setMatrixAt(n, m4);
-        });
-        keys.instanceMatrix.needsUpdate = true;
-        void time;
+      const glowSprite = (inner: string, outer: string) => {
+        const c = document.createElement("canvas");
+        c.width = 128;
+        c.height = 128;
+        const g = c.getContext("2d")!;
+        const rg = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+        rg.addColorStop(0, inner);
+        rg.addColorStop(1, outer);
+        g.fillStyle = rg;
+        g.fillRect(0, 0, 128, 128);
+        const tex = new THREE.CanvasTexture(c);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        return tex;
       };
-      setKeys(0, 0);
-      laptop.add(keys);
-
-      const grilleCv = document.createElement("canvas");
-      grilleCv.width = 64;
-      grilleCv.height = 512;
-      const grc = grilleCv.getContext("2d")!;
-      grc.fillStyle = "#2c3038";
-      grc.fillRect(0, 0, 64, 512);
-      grc.fillStyle = "#0a0b0e";
-      for (let y = 6; y < 512; y += 12) for (let x = 8; x < 64; x += 12) { grc.beginPath(); grc.arc(x + ((y / 12) % 2) * 6, y, 2.6, 0, Math.PI * 2); grc.fill(); }
-      const grilleTex = new THREE.CanvasTexture(grilleCv);
-      grilleTex.colorSpace = THREE.SRGBColorSpace;
-      const grilleMat = new THREE.MeshStandardMaterial({ map: grilleTex, metalness: 0.7, roughness: 0.4 });
-      [-1.53, 1.53].forEach((gx) => {
-        const g = new THREE.Mesh(new THREE.PlaneGeometry(0.1, 1.1), grilleMat);
-        g.rotation.x = -Math.PI / 2;
-        g.position.set(gx, 0.0752, -0.42);
-        laptop.add(g);
-      });
-
-      const pad = new THREE.Mesh(new RoundedBoxGeometry(1.4, 0.004, 0.82, 3, 0.002), shellEdge);
-      pad.position.set(0, 0.0742, 0.6);
-      laptop.add(pad);
-
       const specCv = document.createElement("canvas");
       specCv.width = 512;
       specCv.height = 8;
@@ -510,30 +430,135 @@ export function ScrollFilm({ t }: { t: FilmText }) {
       spx.fillRect(0, 0, 512, 8);
       const specTex = new THREE.CanvasTexture(specCv);
       specTex.colorSpace = THREE.SRGBColorSpace;
-      const hingeLightMat = new THREE.MeshBasicMaterial({ map: specTex, transparent: true, opacity: 0, toneMapped: false });
-      const hingeLight = new THREE.Mesh(new THREE.BoxGeometry(2.7, 0.006, 0.012), hingeLightMat);
-      hingeLight.position.set(0, 0.076, -1.035);
-      laptop.add(hingeLight);
-      const hingeHaloMat = new THREE.MeshBasicMaterial({ map: specTex, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false });
-      const hingeHalo = new THREE.Mesh(new THREE.PlaneGeometry(3.1, 0.22), hingeHaloMat);
-      hingeHalo.rotation.x = -Math.PI / 2;
-      hingeHalo.position.set(0, 0.0758, -0.98);
-      laptop.add(hingeHalo);
-      const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 2.5, 24), shellEdge);
-      barrel.rotation.z = Math.PI / 2;
-      barrel.position.set(0, 0.06, -1.1);
-      laptop.add(barrel);
+
+      const shell = new THREE.MeshStandardMaterial({ color: 0x1a1e27, metalness: 0.9, roughness: 0.32, envMapIntensity: 0.9 });
+      const trim = new THREE.MeshStandardMaterial({ color: 0x4a5266, metalness: 1, roughness: 0.16 });
+      const innerMat = new THREE.MeshStandardMaterial({ color: 0x0b0d13, metalness: 0.6, roughness: 0.5, emissive: 0x2d6bff, emissiveIntensity: 0 });
+
+      const laptop = new THREE.Group();
+      scene.add(laptop);
+      const engine = new THREE.Group();
+      engine.position.set(0, 0.45, -0.35);
+      laptop.add(engine);
+
+      const seamMats: THREE_NS.MeshBasicMaterial[] = [];
+      const halves = [-1, 1].map((side) => {
+        const g = new THREE.Group();
+        const body = new THREE.Mesh(new RoundedBoxGeometry(1.3, 0.8, 1.8, 6, 0.2), shell);
+        body.position.x = side * 0.65;
+        body.castShadow = true;
+        g.add(body);
+        const face = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.66), innerMat);
+        face.rotation.y = side < 0 ? Math.PI / 2 : -Math.PI / 2;
+        face.position.set(side * 0.003, 0, 0);
+        g.add(face);
+        const seamMat = new THREE.MeshBasicMaterial({ map: specTex, transparent: true, opacity: 0.5, toneMapped: false });
+        seamMats.push(seamMat);
+        const seamTop = new THREE.Mesh(new THREE.BoxGeometry(0.014, 0.012, 1.4), seamMat);
+        seamTop.position.set(side * 0.007, 0.401, 0);
+        g.add(seamTop);
+        const seamFront = new THREE.Mesh(new THREE.BoxGeometry(0.014, 0.42, 0.012), seamMat);
+        seamFront.position.set(side * 0.007, 0, 0.901);
+        g.add(seamFront);
+        const band = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.018, 0.01), trim);
+        band.position.set(side * 0.68, -0.14, 0.902);
+        g.add(band);
+        for (let n = 0; n < 3; n++) {
+          const dot = new THREE.Mesh(new THREE.CircleGeometry(0.02, 16), new THREE.MeshBasicMaterial({ color: SPECTRUM[side < 0 ? n : n + 3], toneMapped: false }));
+          dot.position.set(side * (0.34 + n * 0.08), 0.12, 0.903);
+          g.add(dot);
+        }
+        engine.add(g);
+        return g;
+      });
+
+      const core = new THREE.Group();
+      engine.add(core);
+      const coreMat = new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false, transparent: true, opacity: 0 });
+      const coreBall = new THREE.Mesh(new THREE.IcosahedronGeometry(0.16, 3), coreMat);
+      core.add(coreBall);
+      const coreGlowMat = new THREE.SpriteMaterial({ map: glowSprite("rgba(160,185,255,1)", "rgba(45,107,255,0)"), transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false });
+      const coreGlow = new THREE.Sprite(coreGlowMat);
+      coreGlow.scale.setScalar(1.6);
+      core.add(coreGlow);
+      const ringMats: THREE_NS.MeshStandardMaterial[] = [];
+      const rings = [0.34, 0.44, 0.54].map((rad, n) => {
+        const m = new THREE.MeshStandardMaterial({ color: 0x2a3040, metalness: 1, roughness: 0.2, emissive: new THREE.Color(SPECTRUM[[5, 1, 4][n]]), emissiveIntensity: 0 });
+        ringMats.push(m);
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(rad, 0.012 + n * 0.002, 12, 120), m);
+        core.add(ring);
+        return ring;
+      });
+
+      const beamCv = document.createElement("canvas");
+      beamCv.width = 8;
+      beamCv.height = 256;
+      const bx = beamCv.getContext("2d")!;
+      const bg = bx.createLinearGradient(0, 0, 0, 256);
+      bg.addColorStop(0, "rgba(140,170,255,0)");
+      bg.addColorStop(0.7, "rgba(140,170,255,0.55)");
+      bg.addColorStop(1, "rgba(220,230,255,0.9)");
+      bx.fillStyle = bg;
+      bx.fillRect(0, 0, 8, 256);
+      const beamTex = new THREE.CanvasTexture(beamCv);
+      const beamMat = new THREE.MeshBasicMaterial({ map: beamTex, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, toneMapped: false });
+      const beam = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 0.08, 1, 48, 1, true), beamMat);
+      laptop.add(beam);
+
+      const padMat = new THREE.MeshBasicMaterial({ map: glowSprite("rgba(110,149,255,0.7)", "rgba(110,149,255,0)"), transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false });
+      const pad = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 3.2), padMat);
+      pad.rotation.x = -Math.PI / 2;
+      pad.position.set(0, 0.004, -0.35);
+      scene.add(pad);
+
+      const dustGeo = new THREE.BufferGeometry();
+      const dustPos = new Float32Array(360 * 3);
+      for (let n = 0; n < 360; n++) {
+        const a = Math.random() * Math.PI * 2;
+        const rr = 1.2 + Math.random() * 3.4;
+        dustPos.set([Math.cos(a) * rr, Math.random() * 5.5, Math.sin(a) * rr - 0.6], n * 3);
+      }
+      dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPos, 3));
+      const dustMat = new THREE.PointsMaterial({ map: glowSprite("rgba(200,215,255,1)", "rgba(200,215,255,0)"), size: 0.05, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false });
+      const dust = new THREE.Points(dustGeo, dustMat);
+      scene.add(dust);
 
       const hinge = new THREE.Group();
-      hinge.position.set(0, 0.075, -1.1);
+      hinge.position.set(0, 0.075 + LIFT, -1.1);
+      hinge.rotation.x = -0.22;
       laptop.add(hinge);
-      const lid = new THREE.Mesh(new RoundedBoxGeometry(3.3, 2.16, 0.03, 6, 0.014), shell);
-      lid.position.set(0, 1.08, -0.017);
-      lid.castShadow = true;
-      hinge.add(lid);
-      const bezel = new THREE.Mesh(new THREE.PlaneGeometry(3.26, 2.12), black);
-      bezel.position.set(0, 1.08, -0.0015);
-      hinge.add(bezel);
+      const holo = new THREE.Group();
+      holo.position.set(0, 1.09, 0);
+      hinge.add(holo);
+      const frameMat = new THREE.MeshBasicMaterial({ map: specTex, transparent: true, toneMapped: false });
+      [
+        [SCREEN_W + 0.06, 0.012, 0, SCREEN_H / 2 + 0.03],
+        [SCREEN_W + 0.06, 0.012, 0, -SCREEN_H / 2 - 0.03],
+        [0.012, SCREEN_H + 0.06, -SCREEN_W / 2 - 0.03, 0],
+        [0.012, SCREEN_H + 0.06, SCREEN_W / 2 + 0.03, 0],
+      ].forEach(([w, h, x, y]) => {
+        const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), frameMat);
+        m.position.set(x, y, 0.002);
+        holo.add(m);
+      });
+      const haloMat = new THREE.MeshBasicMaterial({ map: glowSprite("rgba(110,149,255,0.45)", "rgba(110,149,255,0)"), transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false });
+      const holoHalo = new THREE.Mesh(new THREE.PlaneGeometry(SCREEN_W * 1.7, SCREEN_H * 1.9), haloMat);
+      holoHalo.position.z = -0.04;
+      holo.add(holoHalo);
+      const scanCv = document.createElement("canvas");
+      scanCv.width = 4;
+      scanCv.height = 8;
+      const scx = scanCv.getContext("2d")!;
+      scx.fillStyle = "rgba(170,195,255,0.6)";
+      scx.fillRect(0, 0, 4, 1);
+      const scanTex = new THREE.CanvasTexture(scanCv);
+      scanTex.wrapS = THREE.RepeatWrapping;
+      scanTex.wrapT = THREE.RepeatWrapping;
+      scanTex.repeat.set(1, 160);
+      const scanMat = new THREE.MeshBasicMaterial({ map: scanTex, transparent: true, opacity: 0.1, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false });
+      const scan = new THREE.Mesh(new THREE.PlaneGeometry(SCREEN_W, SCREEN_H), scanMat);
+      scan.position.z = 0.004;
+      holo.add(scan);
 
       const desk = document.createElement("canvas");
       desk.width = TEX_W;
@@ -548,10 +573,9 @@ export function ScrollFilm({ t }: { t: FilmText }) {
       const screenTex = new THREE.CanvasTexture(live);
       screenTex.colorSpace = THREE.SRGBColorSpace;
       screenTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
-      const screenMat = new THREE.MeshBasicMaterial({ map: screenTex, toneMapped: false });
+      const screenMat = new THREE.MeshBasicMaterial({ map: screenTex, toneMapped: false, transparent: true, opacity: 0.94, side: THREE.DoubleSide });
       const screen = new THREE.Mesh(new THREE.PlaneGeometry(SCREEN_W, SCREEN_H), screenMat);
-      screen.position.set(0, 1.09, -0.001);
-      hinge.add(screen);
+      holo.add(screen);
 
       const logoCanvas = document.createElement("canvas");
       logoCanvas.width = 256;
@@ -559,12 +583,9 @@ export function ScrollFilm({ t }: { t: FilmText }) {
       const lg = logoCanvas.getContext("2d")!;
       const lgGrad = lg.createLinearGradient(0, 0, 256, 256);
       SPECTRUM.forEach((c, n) => lgGrad.addColorStop(n / (SPECTRUM.length - 1), c));
-      lg.shadowColor = "rgba(110, 149, 255, 0.9)";
-      lg.shadowBlur = 24;
       lg.fillStyle = lgGrad;
       roundRect(lg, 40, 40, 176, 176, 46);
       lg.fill();
-      lg.shadowBlur = 0;
       lg.fillStyle = "#ffffff";
       roundRect(lg, 72, 102, 112, 16, 8);
       lg.fill();
@@ -572,10 +593,10 @@ export function ScrollFilm({ t }: { t: FilmText }) {
       lg.fill();
       const logoTex = new THREE.CanvasTexture(logoCanvas);
       logoTex.colorSpace = THREE.SRGBColorSpace;
-      const logo = new THREE.Mesh(new THREE.PlaneGeometry(0.46, 0.46), new THREE.MeshBasicMaterial({ map: logoTex, transparent: true, toneMapped: false }));
-      logo.position.set(0, 1.08, -0.0325);
-      logo.rotation.y = Math.PI;
-      hinge.add(logo);
+      const logo = new THREE.Mesh(new THREE.PlaneGeometry(0.34, 0.34), new THREE.MeshBasicMaterial({ map: logoTex, transparent: true, toneMapped: false }));
+      logo.rotation.x = -Math.PI / 2;
+      logo.position.set(0.62, 0.402, 0.25);
+      halves[1].add(logo);
 
       const shelf = new THREE.Group();
       scene.add(shelf);
@@ -660,9 +681,9 @@ export function ScrollFilm({ t }: { t: FilmText }) {
 
       let lastKey = "";
       const paintScreen = (p: number) => {
-        const ring = ease(seg(p, 0.17, 0.27));
-        const reveal = ease(seg(p, 0.27, 0.34));
-        const key = p < 0.17 ? "off" : p < 0.34 ? `boot${Math.round(p * 1500)}` : p < 0.47 || p > 0.61 ? "desk" : String(Math.round(p * 2000));
+        const ring = ease(seg(p, 0.22, 0.3));
+        const reveal = ease(seg(p, 0.3, 0.35));
+        const key = p < 0.2 ? "off" : p < 0.35 ? `boot${Math.round(p * 1500)}` : p < 0.47 || p > 0.61 ? "desk" : String(Math.round(p * 2000));
         if (key === lastKey) return;
         lastKey = key;
         if (key === "off") {
@@ -696,21 +717,55 @@ export function ScrollFilm({ t }: { t: FilmText }) {
         camera.lookAt(camLook);
 
         const idle = reduce ? 0 : 1 - seg(p, 0.02, 0.14);
-        laptop.rotation.y = -0.5 * (1 - ease(seg(p, 0, 0.3))) + Math.sin(time * 0.0006) * 0.06 * idle;
-        laptop.position.y = Math.sin(time * 0.0012) * 0.03 * idle;
-        const o = seg(p, 0.1, 0.29);
-        const lidEase = o === 1 ? 1 : 1 + 2.4 * Math.pow(o - 1, 3) + 1.4 * Math.pow(o - 1, 2);
-        hinge.rotation.x = Math.PI / 2 - (Math.PI / 2 + 0.22) * lidEase;
-        const wake = seg(p, 0.08, 0.3);
-        setKeys(wake, time);
-        const glowOn = ease(seg(p, 0.14, 0.3));
-        backlightMat.opacity = glowOn * 0.55;
-        keyMat.emissiveIntensity = glowOn * 0.08;
-        hingeLightMat.opacity = ease(seg(p, 0.1, 0.18));
-        hingeHaloMat.opacity = ease(seg(p, 0.1, 0.2)) * (0.55 + 0.25 * Math.sin(time * 0.003) * idle);
-        const power = ease(seg(p, 0.17, 0.3));
+        const t = reduce ? 0 : time * 0.001;
+        laptop.rotation.y = -0.5 * (1 - ease(seg(p, 0, 0.3))) + Math.sin(t * 0.6) * 0.06 * idle;
+        engine.position.y = 0.45 + Math.sin(t * 1.2) * 0.05;
+        const o = seg(p, 0.08, 0.22);
+        const open = o === 1 ? 1 : 1 + 2.4 * Math.pow(o - 1, 3) + 1.4 * Math.pow(o - 1, 2);
+        halves.forEach((g, n) => {
+          const side = n === 0 ? -1 : 1;
+          g.position.set(side * 0.62 * open, 0.06 * open, -0.08 * open);
+          g.rotation.y = side * 0.5 * open;
+          g.rotation.z = -side * 0.08 * open;
+        });
+        const seamPulse = 0.5 + 0.3 * Math.sin(t * 2.4) * idle;
+        seamMats.forEach((m) => (m.opacity = Math.min(1, seamPulse + ease(seg(p, 0.05, 0.12)))));
+        innerMat.emissiveIntensity = ease(seg(p, 0.1, 0.2)) * 0.6;
+        const spin = ease(seg(p, 0.12, 0.26));
+        const coreOn = ease(seg(p, 0.1, 0.18));
+        coreMat.opacity = coreOn;
+        coreGlowMat.opacity = coreOn * (0.85 + 0.15 * Math.sin(t * 5));
+        coreLight.intensity = coreOn * 3;
+        coreBall.scale.setScalar(0.4 + 0.6 * coreOn);
+        rings.forEach((ring, n) => {
+          ring.scale.setScalar(0.2 + 0.8 * spin);
+          ring.rotation.set(t * (0.7 + n * 0.35) * spin + n * 1.1, t * (0.9 - n * 0.2) * spin + n * 0.6, n * 0.5);
+          ringMats[n].emissiveIntensity = spin * 1.6;
+        });
+        core.position.y = 0.25 * spin;
+        const grow = ease(seg(p, 0.17, 0.22));
+        const beamOn = grow * (1 - ease(seg(p, 0.4, 0.5)) * 0.6);
+        const coreY = engine.position.y + core.position.y;
+        const beamTop = 0.075 + LIFT + 0.06;
+        const beamLen = Math.max(0.001, (beamTop - coreY) * grow);
+        beam.scale.set(1, beamLen, 1);
+        beam.position.set(0, coreY + beamLen / 2, -0.35 - 0.6 * grow);
+        beamMat.opacity = beamOn * 0.45;
+        const ux = ease(seg(p, 0.2, 0.25));
+        const uy = ease(seg(p, 0.24, 0.31));
+        holo.scale.set(0.02 + 0.98 * ux, 0.01 + 0.99 * uy, 1);
+        holo.visible = ux > 0;
+        frameMat.opacity = ux * (0.85 + 0.15 * Math.sin(t * 3));
+        haloMat.opacity = uy * 0.5;
+        screenMat.opacity = 0.94 * uy;
+        scanTex.offset.y = -t * 0.6;
+        scanMat.opacity = 0.1 * uy;
+        dust.rotation.y = t * 0.04;
+        dust.position.y = -((t * 0.08) % 0.5);
+        padMat.opacity = 0.18 + 0.35 * coreOn;
+        const power = uy;
         const flash = seg(p, 0.575, 0.6);
-        spill.intensity = power * 2.2 + Math.sin(flash * Math.PI) * 6;
+        spill.intensity = power * 1.6 + Math.sin(flash * Math.PI) * 6;
         paintScreen(p);
 
         const rise = ease(seg(p, 0.62, 0.74));
@@ -788,8 +843,8 @@ export function ScrollFilm({ t }: { t: FilmText }) {
         const prev = cur;
         cur += (target - cur) * (reduce ? 1 : 1 - Math.exp(-dt * 7));
         if (Math.abs(target - cur) < 0.00005) cur = target;
-        const idle = !reduce && cur < 0.14;
-        if (dirty || idle || cur !== prev) {
+        const live = !reduce;
+        if (dirty || live || cur !== prev) {
           apply(cur, now);
           renderer.render(scene, camera);
           dirty = false;
@@ -832,12 +887,20 @@ export function ScrollFilm({ t }: { t: FilmText }) {
       <div className="m-film-pin">
         <canvas className="m-film-canvas" aria-hidden="true" />
         <div className="m-film-flash" aria-hidden="true" />
-        <div className="m-film-title" aria-hidden="true">
+        <div className="m-film-title">
           <p className="m-film-brand">Ledge</p>
+          <div className="m-film-foot">
+            <p className="m-film-cta">
+              <a className="btn" href={href}>
+                {cta}
+              </a>
+              <span>{t.free}</span>
+            </p>
           <p className="m-film-hint">
             <span>{t.hint}</span>
             <i />
           </p>
+          </div>
         </div>
         <div className="m-film-caps">
           {t.captions.map((c) => (

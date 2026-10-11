@@ -10,7 +10,15 @@ export type PostMeta = {
 };
 
 /** Add a slug here after creating content/blog/<slug>.mdx. */
-export const postSlugs = ["blur-sensitive-info-in-mac-screenshots"] as const;
+export const postSlugs = [
+  "organize-screenshots-on-mac",
+  "keep-screenshots-off-mac-desktop",
+  "drag-screenshot-into-any-app-mac",
+  "ledge-vs-shottr",
+  "ledge-vs-cleanshot-x",
+  "ledge-vs-dropover",
+  "blur-sensitive-info-in-mac-screenshots",
+] as const;
 
 export async function getPost(slug: string): Promise<{ Content: ComponentType; meta: PostMeta }> {
   const mod = await import(`@/content/blog/${slug}.mdx`);

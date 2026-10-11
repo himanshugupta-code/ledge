@@ -2,7 +2,7 @@ const en = {
   meta: {
     title: "Ledge: Free Screenshot Manager & Shelf for Mac",
     description:
-      "Ledge is a free Mac menu bar app that keeps your latest screenshots on a shelf at the top of your screen. Drag, copy, annotate and blur sensitive info.",
+      "Ledge is a free, open-source Mac app that keeps your latest screenshots on a shelf at the top of the screen. Drag, copy, annotate and pixelate them.",
     keywords: [
       "screenshot manager mac",
       "mac screenshot organizer",
@@ -22,8 +22,8 @@ const en = {
   theme: { group: "Colour theme", light: "Light theme", system: "System theme", dark: "Dark theme" },
   hero: {
     eyebrow: "Ledge",
-    title: "A shelf for your screenshots.",
-    sub: "Your newest screenshots wait along the top of the screen, out of the way until you reach for them.",
+    title: "The screenshot shelf for your Mac.",
+    sub: "Ledge is a free, open-source screenshot manager. Your newest screenshots wait along the top of the screen, out of the way until you reach for them.",
     cta: "Download for Mac",
     film: "Watch the film",
     note: "Free. macOS on Apple silicon. Mac App Store version in review.",
@@ -37,7 +37,7 @@ const en = {
     x64: "Intel Mac",
     shelf: {
       kicker: "The shelf",
-      title: "Every capture lands on the ledge.",
+      title: "Every screenshot lands on the shelf.",
       body: "Ledge watches the folder your screenshots already go to. Take one the usual way and it slides onto the shelf a moment later.",
       panel: "New captures",
       subs: [
@@ -59,7 +59,7 @@ const en = {
     },
     drag: {
       kicker: "Drag & copy",
-      title: "Drag it anywhere. Try it.",
+      title: "Drag screenshots into any app. Try it.",
       body: "Pull a screenshot off the ledge into a chat, an email or a folder. Or copy it in one click.",
       panel: "Drag the screenshot",
       hint: "Drag me onto an app",
@@ -89,7 +89,7 @@ const en = {
     },
     keys: {
       kicker: "Shortcuts",
-      title: "Everything has a key.",
+      title: "Everything has a keyboard shortcut.",
       body: "Press a key on your keyboard or tap one here. Highlighted keys do something in Ledge.",
       panel: "Press any key",
       prompt: "Press a key",
@@ -128,18 +128,20 @@ const en = {
     },
   },
   editor: {
-    line1: "Mark it up.",
+    line1: "Annotate and pixelate.",
     line2: "Then send it.",
     body: "Click any screenshot to open the editor. Annotate with arrows and text, pixelate passwords and keys, adjust the light, crop and rotate. Undo anything.",
     alt: "The Ledge editor with a tool rail, an annotated screenshot with pixelated keys, and style and adjust panels.",
   },
   film: {
     hint: "Scroll to open",
+    free: "Free and open source",
     aria: "A short film about a screenshot. A laptop opens, a screenshot is taken, and it flies up onto Ledge's shelf.",
     captions: ["It starts on your Mac.", "You take a screenshot, like you always do.", "Ledge catches it the moment it's taken.", "And keeps it on a shelf, one reach away."],
   },
   video: { title: "See it in 40 seconds." },
   game: {
+    hint: "Move with the mouse, a finger or the arrow keys.",
     kicker: "Built with Unity",
     try: "Move your pointer over the board to try the ledge.",
     caught: "Caught",
@@ -148,10 +150,10 @@ const en = {
     title: "Take a break. Catch some shots.",
     body: "Shelf Catch is a tiny game built in Unity. Slide the ledge to catch falling screenshots and dodge the desktop clutter. Three misses and you are out.",
     play: "Play Shelf Catch",
-    hint: "Move with the mouse, a finger or the arrow keys.",
     loading: "Loading the game…",
     full: "Open full screen",
   },
+  guides: { title: "Screenshot guides for Mac", all: "All guides", note: "" },
   faq: {
     title: "Questions, answered.",
     items: [
@@ -164,6 +166,9 @@ const en = {
         q: "How do I show the ledge?",
         a: "Rest the pointer at the top edge of your screen, or press Cmd+Option+L. Move away, or press Esc, to tuck it back up.",
       },
+      { q: "Is Ledge open source?", a: "Yes. Ledge is MIT-licensed and the full source code is on GitHub. You can read it, build it yourself or contribute." },
+      { q: "Where do Mac screenshots go, and does Ledge move them?", a: "macOS saves screenshots to your Desktop unless you changed the location in the Screenshot toolbar (Shift+Cmd+5, then Options). Ledge watches that folder. Turn on Move New Screenshots into Ledge to keep them off your Desktop; screenshots it moved go to the Trash when you take them off the ledge." },
+      { q: "How is Ledge different from CleanShot X or Shottr?", a: "CleanShot X and Shottr are capture tools with features like scrolling capture and OCR. Ledge does not change how you take screenshots; it keeps the ones you take within reach, with a quick editor for markup and pixelation. It is free, open source and works entirely offline." },
     ],
   },
   get: {
@@ -207,6 +212,13 @@ const en = {
     emptyBody: "Make sure the folder you chose is the one macOS saves screenshots to. Ledge only looks at that folder.",
   },
   blog: {
+    city: { start: "Start exploring", walking: "Walking", driving: "Driving", enterCar: "Get in the car", exitCar: "Get out of the car", read: "Read", leave: "Stop", move: "Move", car: "Car", open: "Read" },
+    cityLead: "Every guide is a building in this little city. Walk around, hop in the car, and pull up to a glowing pad to read.",
+    heroTitle: "Mac screenshot guides and comparisons",
+    guide: "Guide",
+    compare: "Comparison",
+    next: "Read next",
+    all: "All guides",
     title: "Blog",
     metaTitle: "Blog: Mac screenshot tips",
     desc: "Practical tips for taking, organizing, annotating and safely sharing screenshots on a Mac.",
